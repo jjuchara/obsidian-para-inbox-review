@@ -26,3 +26,10 @@
 - The Obsidian adapter supplies typed file snapshots; pure domain code filters and orders the Inbox without accessing workspace state.
 - Session transitions are immutable and reject advancement outside the active state.
 - Skipped notes are retained separately so a finished pass cannot be confused with an empty Inbox.
+
+## 2026-07-24 — Port the released Neovim metadata plan exactly
+
+- Status: accepted and implemented in the pure planner.
+- Property order, value types, missing-input reporting, tag normalization, move-last behavior, and reverse compensation match the released Neovim contract.
+- The planner accepts explicit Projects and Areas index links rather than discovering MOC notes.
+- Existing non-empty metadata is never overwritten, and the planner never receives or changes note body content.

@@ -27,6 +27,11 @@ Capture, Home, general search, multi-note merge, and Daily notes are outside thi
 - independent active, finished, paused, closed, and halted session states;
 - immutable complete, skip, pause, close, and halt transitions;
 - summaries that distinguish an empty Inbox from a pass completed with skipped notes.
+- a pure PARA metadata planner that preserves existing values, reports missing input, moves last, and emits reverse compensation steps.
+
+## Settings
+
+The plugin stores explicit vault-relative roots for Inbox, Projects, Areas, Resources, and Archives. Projects and Areas also have explicit index wikilinks used only when a sorted note is missing its `links` property. Settings are persisted through Obsidian's plugin data API; paths are not guessed from the active file.
 
 ## Development
 
