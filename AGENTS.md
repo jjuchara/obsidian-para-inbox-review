@@ -9,7 +9,7 @@
 
 ## Current state
 
-This repository contains the in-progress `PARA Inbox Review` Obsidian community plugin. The pure direct-child FIFO loader, file snapshots, immutable review session model, PARA operation planner, asynchronous transaction executor, and concrete official-API mutation adapter are implemented and tested; the review UI is not implemented yet. Scope remains limited to a compatible Inbox review workflow. Capture, Home, general search, multi-note merge, and Daily notes remain outside this repository.
+This repository contains the in-progress `PARA Inbox Review` Obsidian community plugin. The direct-child FIFO loader, immutable review session, PARA planner, transaction executor, official-API mutation adapter, and first native command/view shell are implemented and tested; PARA action controls are not connected yet. Scope remains limited to a compatible Inbox review workflow. Capture, Home, general search, multi-note merge, and Daily notes remain outside this repository.
 
 The plugin uses TypeScript, the official Obsidian API, npm, esbuild, and ESLint. Use `npm run check` before claiming changes are complete. Do not develop against the production vault; use a dedicated test vault.
 

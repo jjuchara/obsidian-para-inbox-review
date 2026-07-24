@@ -47,3 +47,10 @@
 - Mutation preflight reads current note content with `Vault.read()` and parses only its frontmatter with the official `getFrontMatterInfo()` and `parseYaml()` helpers.
 - `MetadataCache.getFileCache()` is not used for this safety check because cache freshness is event-driven and may lag behind a native-editor save.
 - The adapter compares file `mtime` and size before and after the read, rejects unsafe vault paths, and keeps all writes on `FileManager` APIs.
+
+## 2026-07-24 — Keep navigation state outside the review view
+
+- Status: accepted and implemented for the first native UI slice.
+- A review controller owns session and pending state; `ItemView` subscribes to snapshots and can be recreated without advancing the queue.
+- Start and skip serialize navigation, open notes in Obsidian's native editor, and commit a transition only after the required note opens successfully.
+- The initial shell exposes start, skip, and pause. PARA and trash controls remain unavailable until their input, confirmation, and recovery UI is implemented.

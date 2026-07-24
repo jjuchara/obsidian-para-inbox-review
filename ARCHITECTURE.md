@@ -11,6 +11,7 @@
 - Each pass is built from Markdown files directly under the configured Inbox folder, ordered oldest first by `TFile.stat.ctime` with a deterministic path tie-breaker. The loader records `mtime` and size for later external-change preflight.
 - Session state is an immutable domain model independent from workspace leaves. It distinguishes active, finished, paused, closed, and halted states; only an active state can advance.
 - A skipped note leaves the current pass but remains in the Inbox summary. `inboxEmpty` is true only after every queued note was successfully processed and none was skipped.
+- A tested review controller owns the current session independently from the view, serializes asynchronous navigation, and commits a skip only after the next note opens successfully. The plugin lifecycle registers the command, ribbon action, and `ItemView`; the current note opens in a normal workspace leaf.
 
 ## Official API boundary
 

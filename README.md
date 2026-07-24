@@ -4,7 +4,7 @@ An Obsidian community plugin for reviewing an Inbox as a predictable FIFO queue 
 
 ## Status
 
-The repository is under active development. The FIFO loader, review session model, transaction executor, and official-API mutation adapter are implemented and covered by automated tests; the Obsidian review UI is not implemented yet.
+The repository is under active development. The FIFO loader, review session model, transaction executor, official-API mutation adapter, and first native review shell are implemented and covered by automated tests; PARA action controls are not connected yet.
 
 ## Scope
 
@@ -30,6 +30,11 @@ Capture, Home, general search, multi-note merge, and Daily notes are outside thi
 - a pure PARA metadata planner that preserves existing values, reports missing input, moves last, and emits reverse compensation steps.
 - an async transaction executor that rechecks file and metadata snapshots, blocks destination conflicts, applies properties in order, moves last, and reports complete or incomplete rollback.
 - an Obsidian mutation adapter that performs typed Markdown lookup, reads fresh frontmatter snapshots, uses atomic frontmatter edits, moves through `FileManager.renameFile()`, and sends confirmed deletions through `FileManager.trashFile()`.
+- the `Open inbox review` command and ribbon action, a native editor for the current FIFO note, and an `ItemView` with queue status, skip, and pause controls.
+
+## Commands
+
+- `Open inbox review` rebuilds the FIFO queue, opens the oldest note in Obsidian's native Markdown editor, and reveals the review view.
 
 ## Settings
 
