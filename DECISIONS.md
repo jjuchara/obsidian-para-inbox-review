@@ -53,4 +53,12 @@
 - Status: accepted and implemented for the first native UI slice.
 - A review controller owns session and pending state; `ItemView` subscribes to snapshots and can be recreated without advancing the queue.
 - Start and skip serialize navigation, open notes in Obsidian's native editor, and commit a transition only after the required note opens successfully.
-- The initial shell exposes start, skip, and pause. PARA and trash controls remain unavailable until their input, confirmation, and recovery UI is implemented.
+- The initial shell exposed start, skip, and pause; the later action slice below adds PARA and trash controls without moving session ownership into the view.
+
+## 2026-07-24 — Save native edits before establishing the action snapshot
+
+- Status: accepted and implemented for the complete automated review flow.
+- A PARA action calls `MarkdownView.save()` before its first inspection, so edits intentionally made in the native editor become the operation baseline rather than an external-change error.
+- Folder, area, and archive-reason input is collected after that inspection. The transaction executor inspects again immediately before mutation and rejects any source change that occurred during input collection.
+- Destination folders are selected from the configured root and its existing descendants. Missing area values are selected only from existing notes tagged `#area`; existing non-empty metadata is never prompted or overwritten.
+- Cancellation stays mutation-free. Successful sorting or confirmed trash advances the queue, complete rollback keeps the item active, and incomplete rollback halts the session with exact recovery details.

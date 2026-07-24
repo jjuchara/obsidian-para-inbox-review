@@ -64,12 +64,34 @@ export class ParaInboxReviewView extends ItemView {
 		if (current) {
 			this.contentEl.createEl('p', { text: current.path });
 			const actions = this.contentEl.createDiv({ cls: 'para-inbox-review-actions' });
+			for (const [label, category] of [
+				['Projects', 'projects'],
+				['Areas', 'areas'],
+				['Resources', 'resources'],
+				['Archives', 'archives'],
+			] as const) {
+				const button = actions.createEl('button', { text: label });
+				button.disabled = this.plugin.reviewController.isPending();
+				button.addEventListener('click', () => void this.plugin.sortReview(category));
+			}
 			const skip = actions.createEl('button', { text: 'Skip' });
 			skip.disabled = this.plugin.reviewController.isPending();
 			skip.addEventListener('click', () => void this.plugin.skipReview());
 			const pause = actions.createEl('button', { text: 'Pause' });
 			pause.disabled = this.plugin.reviewController.isPending();
 			pause.addEventListener('click', () => this.plugin.pauseReview());
+			const trash = actions.createEl('button', { text: 'Move to trash' });
+			trash.disabled = this.plugin.reviewController.isPending();
+			trash.addEventListener('click', () => void this.plugin.trashReview());
+			const close = actions.createEl('button', { text: 'Close review' });
+			close.disabled = this.plugin.reviewController.isPending();
+			close.addEventListener('click', () => this.plugin.closeReview());
+			return;
+		}
+
+		if (session.status === 'halted') {
+			this.contentEl.createEl('h3', { text: 'Manual recovery required' });
+			this.contentEl.createEl('pre', { text: session.haltReason ?? 'Unknown recovery state' });
 			return;
 		}
 

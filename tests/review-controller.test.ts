@@ -95,3 +95,36 @@ void test('pause preserves the current note and closes advancement', async () =>
 	assert.equal(session.pending[0]?.path, '6. Inbox/Old.md');
 	await assert.rejects(setup.controller.skip(), /no active Inbox note/u);
 });
+
+void test('a successful current action completes and opens the next note', async () => {
+	const setup = fixture();
+	await setup.controller.start();
+	const result = await setup.controller.performCurrent(async (item) => ({
+		transition: 'complete',
+		result: item.path,
+	}));
+
+	assert.equal(result, '6. Inbox/Old.md');
+	assert.equal(setup.controller.getSession()?.processed, 1);
+	assert.equal(setup.controller.getSession()?.pending[0]?.path, '6. Inbox/New.md');
+});
+
+void test('stay and halt decisions preserve exact action outcomes', async () => {
+	const setup = fixture();
+	await setup.controller.start();
+	const canceled = await setup.controller.performCurrent(async () => ({
+		transition: 'stay',
+		result: 'canceled',
+	}));
+	assert.equal(canceled, 'canceled');
+	assert.equal(setup.controller.getSession()?.status, 'active');
+
+	const failed = await setup.controller.performCurrent(async () => ({
+		transition: 'halt',
+		result: 'rollback',
+		reason: 'Manual recovery required',
+	}));
+	assert.equal(failed, 'rollback');
+	assert.equal(setup.controller.getSession()?.status, 'halted');
+	assert.equal(setup.controller.getSession()?.haltReason, 'Manual recovery required');
+});

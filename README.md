@@ -4,7 +4,7 @@ An Obsidian community plugin for reviewing an Inbox as a predictable FIFO queue 
 
 ## Status
 
-The repository is under active development. The FIFO loader, review session model, transaction executor, official-API mutation adapter, and first native review shell are implemented and covered by automated tests; PARA action controls are not connected yet.
+The repository is under active development. The automated Inbox review workflow is implemented and covered by tests, including native-editor save, PARA input collection, transactional sorting, confirmed trash, and halted recovery output. Disposable-vault manual verification is still required before production use.
 
 ## Scope
 
@@ -31,10 +31,14 @@ Capture, Home, general search, multi-note merge, and Daily notes are outside thi
 - an async transaction executor that rechecks file and metadata snapshots, blocks destination conflicts, applies properties in order, moves last, and reports complete or incomplete rollback.
 - an Obsidian mutation adapter that performs typed Markdown lookup, reads fresh frontmatter snapshots, uses atomic frontmatter edits, moves through `FileManager.renameFile()`, and sends confirmed deletions through `FileManager.trashFile()`.
 - the `Open inbox review` command and ribbon action, a native editor for the current FIFO note, and an `ItemView` with queue status, skip, and pause controls.
+- Projects, Areas, Resources, and Archives controls with nested destination-folder selection, existing `#area` note selection when required, archive-reason input, skip, pause, close, transaction results, and exact halted recovery output.
+- confirmed movement to the user's configured Obsidian trash; permanent deletion is not exposed.
 
 ## Commands
 
 - `Open inbox review` rebuilds the FIFO queue, opens the oldest note in Obsidian's native Markdown editor, and reveals the review view.
+
+Before a PARA action, the plugin saves the current native Markdown view, reads a fresh source snapshot, collects every required input, and then revalidates the source immediately before the first mutation. Canceling a selector or prompt leaves the note and session unchanged.
 
 ## Settings
 
