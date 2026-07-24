@@ -28,6 +28,7 @@ Capture, Home, general search, multi-note merge, and Daily notes are outside thi
 - immutable complete, skip, pause, close, and halt transitions;
 - summaries that distinguish an empty Inbox from a pass completed with skipped notes.
 - a pure PARA metadata planner that preserves existing values, reports missing input, moves last, and emits reverse compensation steps.
+- an async transaction executor that rechecks file and metadata snapshots, blocks destination conflicts, applies properties in order, moves last, and reports complete or incomplete rollback.
 
 ## Settings
 

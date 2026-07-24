@@ -33,3 +33,10 @@
 - Property order, value types, missing-input reporting, tag normalization, move-last behavior, and reverse compensation match the released Neovim contract.
 - The planner accepts explicit Projects and Areas index links rather than discovering MOC notes.
 - Existing non-empty metadata is never overwritten, and the planner never receives or changes note body content.
+
+## 2026-07-24 — Put transaction semantics behind an injected async port
+
+- Status: accepted and implemented for the executor slice.
+- Pure execution code owns preflight ordering, applied-step tracking, move-last, reverse compensation, and recovery results.
+- The future Obsidian adapter owns only typed lookup and individual `FileManager` operations.
+- No mutation begins if the file snapshot, metadata snapshot, required input, or destination check differs from the plan.

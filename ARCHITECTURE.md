@@ -37,3 +37,5 @@ A PARA action is a multi-step operation, not an atomic Obsidian API transaction.
 Existing metadata and note body content remain unchanged unless the user edits the note in the native editor.
 
 The pure planner is implemented independently from Obsidian APIs. It produces a preflight report, complete metadata snapshot, ordered property additions, a move-last step, and reverse compensation steps. Missing `area`, `archive_reason`, `created`, or `archived` values remain visible in preflight and prevent a future executor from starting.
+
+The executor depends on a narrow asynchronous mutation port instead of Obsidian globals. Before the first write it rejects missing input, changed file evidence, changed metadata, inspection errors, and exact destination conflicts. It records only successful property steps, compensates those steps in reverse after an apply or move failure, and distinguishes complete rollback from a halted incomplete-recovery result.

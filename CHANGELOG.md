@@ -12,3 +12,4 @@ All notable changes to this project will be documented in this file.
 - Added automated domain tests and made the CI matrix run the complete build, lint, and test gate.
 - Added the shared PARA metadata normalizer and pure operation planner with missing-input preflight, move-last ordering, snapshots, and reverse compensation.
 - Added explicit Projects and Areas index-link settings used only when the destination metadata is missing.
+- Added the asynchronous transaction executor with source revalidation, destination-conflict preflight, ordered mutation, move-last behavior, selective rollback, and exact incomplete-recovery details.
