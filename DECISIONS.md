@@ -1,0 +1,21 @@
+# Decisions
+
+## 2026-07-24 — Keep the plugin limited to Inbox review
+
+- Status: accepted.
+- The repository implements only the compatible FIFO Inbox review workflow.
+- Capture, Home, general search, multi-note merge, and Daily notes remain in their existing owners or future project phases.
+
+## 2026-07-24 — Use native views and official vault APIs
+
+- Status: accepted for implementation.
+- The current note opens in Obsidian's native Markdown editor; a dedicated item view owns review controls and queue state.
+- Metadata uses `FileManager.processFrontMatter()`, moves use `FileManager.renameFile()`, and deletion uses `FileManager.trashFile()`.
+- Direct filesystem access, network calls, and telemetry are excluded.
+
+## 2026-07-24 — Preserve the existing transaction contract
+
+- Status: accepted for implementation.
+- Review collects every required value and completes preflight before the first mutation.
+- Required metadata is added only when missing, the note body is preserved, and the move occurs last.
+- A failed mutation compensates completed steps or halts with an exact recovery report.

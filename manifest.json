@@ -1,0 +1,10 @@
+{
+	"id": "para-inbox-review",
+	"name": "PARA Inbox Review",
+	"version": "0.1.0",
+	"minAppVersion": "1.12.0",
+	"description": "Review an Inbox as a predictable FIFO queue and sort notes into PARA.",
+	"author": "jjuchara",
+	"authorUrl": "https://github.com/jjuchara",
+	"isDesktopOnly": false
+}
