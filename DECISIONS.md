@@ -38,5 +38,12 @@
 
 - Status: accepted and implemented for the executor slice.
 - Pure execution code owns preflight ordering, applied-step tracking, move-last, reverse compensation, and recovery results.
-- The future Obsidian adapter owns only typed lookup and individual `FileManager` operations.
+- The Obsidian adapter owns only typed lookup, fresh frontmatter inspection, path validation, and individual `FileManager` operations.
 - No mutation begins if the file snapshot, metadata snapshot, required input, or destination check differs from the plan.
+
+## 2026-07-24 — Read fresh frontmatter for mutation preflight
+
+- Status: accepted and implemented in the Obsidian adapter.
+- Mutation preflight reads current note content with `Vault.read()` and parses only its frontmatter with the official `getFrontMatterInfo()` and `parseYaml()` helpers.
+- `MetadataCache.getFileCache()` is not used for this safety check because cache freshness is event-driven and may lag behind a native-editor save.
+- The adapter compares file `mtime` and size before and after the read, rejects unsafe vault paths, and keeps all writes on `FileManager` APIs.
