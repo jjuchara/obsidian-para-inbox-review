@@ -4,7 +4,7 @@ An Obsidian community plugin for reviewing an Inbox as a predictable FIFO queue 
 
 ## Status
 
-The repository is under active development. The automated Inbox review workflow is implemented and covered by tests, including native-editor save, PARA input collection, transactional sorting, confirmed trash, and halted recovery output. Disposable-vault manual verification is still required before production use.
+The Inbox review workflow is implemented and covered by automated tests, including native-editor save, PARA input collection, transactional sorting, confirmed trash, and halted recovery output. The complete workflow has also passed its first manual gate in a disposable vault on Obsidian 1.12.7; the plugin has not been published yet.
 
 ## Scope
 

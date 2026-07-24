@@ -17,3 +17,5 @@ All notable changes to this project will be documented in this file.
 - Added the `Open inbox review` command, inbox ribbon action, native-note navigation, review status view, and tested skip/pause controller with serialized pending actions.
 - Added Projects, Areas, Resources, and Archives controls with native-editor save, nested folder selection, missing-area selection from `#area` notes, archive-reason input, transactional execution, and halted recovery rendering.
 - Added explicit trash confirmation backed by the user's configured Obsidian trash and advanced the isolated gate to 43 tests.
+- Fixed Obsidian `FuzzySuggestModal` lifecycle handling so a selected folder is not mistaken for cancellation and a following area selector mounts only after the first modal has fully closed; the isolated gate now passes 45 tests.
+- Completed the Obsidian 1.12.7 disposable-vault gate for native save, all PARA categories, nested folder and area selection, prompt cancellation, skip, pause, close, trash cancellation/success, destination conflict, complete rollback, and incomplete rollback with exact halted recovery output.

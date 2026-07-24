@@ -10,17 +10,19 @@ import {
 } from 'obsidian';
 import type { ParaCategory } from '../domain/operation-plan';
 import type { ParaActionInputPort } from '../para-action-service';
+import { ChoiceSettlement } from '../choice-settlement';
 
 class ChoiceModal extends FuzzySuggestModal<string> {
-	private settled = false;
+	private readonly settlement: ChoiceSettlement<string>;
 
 	constructor(
 		app: App,
 		private readonly choices: readonly string[],
-		private readonly resolveChoice: (choice: string | null) => void,
+		resolveChoice: (choice: string | null) => void,
 		title: string,
 	) {
 		super(app);
+		this.settlement = new ChoiceSettlement(resolveChoice);
 		this.setTitle(title);
 	}
 
@@ -33,12 +35,11 @@ class ChoiceModal extends FuzzySuggestModal<string> {
 	}
 
 	onChooseItem(item: string): void {
-		this.settled = true;
-		this.resolveChoice(item);
+		this.settlement.choose(item);
 	}
 
 	onClose(): void {
-		if (!this.settled) this.resolveChoice(null);
+		this.settlement.close();
 	}
 }
 

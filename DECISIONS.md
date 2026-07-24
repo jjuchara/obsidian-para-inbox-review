@@ -62,3 +62,9 @@
 - Folder, area, and archive-reason input is collected after that inspection. The transaction executor inspects again immediately before mutation and rejects any source change that occurred during input collection.
 - Destination folders are selected from the configured root and its existing descendants. Missing area values are selected only from existing notes tagged `#area`; existing non-empty metadata is never prompted or overwritten.
 - Cancellation stays mutation-free. Successful sorting or confirmed trash advances the queue, complete rollback keeps the item active, and incomplete rollback halts the session with exact recovery details.
+
+## 2026-07-24 — Settle fuzzy choices after modal teardown
+
+- Status: accepted, implemented, regression-tested, and verified in Obsidian 1.12.7.
+- `FuzzySuggestModal` calls `onClose()` before `onChooseItem()` and a follow-up modal cannot safely mount inside the first modal's teardown.
+- The adapter records a later choice and resolves selection or cancellation on the next window macrotask. This preserves cancellation while allowing folder selection to continue into an area selector.

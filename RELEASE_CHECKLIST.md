@@ -2,14 +2,14 @@
 
 ## Before release
 
-- [ ] Canonical Russian documentation and affected English code-adjacent contracts are synchronized.
-- [ ] `npm run check` passes.
-- [ ] `git diff --check` passes.
-- [ ] Inbox review passes automated success, cancellation, conflict, rollback, and incomplete-recovery scenarios.
-- [ ] Manual testing passes in a disposable vault with the exact intended Obsidian version.
-- [ ] The production vault has not been used for development or first-run mutation testing.
-- [ ] `manifest.json` and `versions.json` agree on plugin and minimum app versions.
-- [ ] The production build contains no telemetry, network access, direct filesystem access, or undeclared dependencies.
+- [x] Canonical Russian documentation and affected English code-adjacent contracts are synchronized. ✅ 2026-07-24
+- [x] `npm run check` passes (45 tests). ✅ 2026-07-24
+- [x] `git diff --check` passes. ✅ 2026-07-24
+- [x] Inbox review passes automated success, cancellation, conflict, rollback, and incomplete-recovery scenarios. ✅ 2026-07-24
+- [x] Manual testing passes in a disposable vault on Obsidian 1.12.7. ✅ 2026-07-24
+- [x] The production vault has not been used for development or first-run mutation testing. ✅ 2026-07-24
+- [x] `manifest.json` and `versions.json` agree on plugin and minimum app versions. ✅ 2026-07-24
+- [x] The production build contains no telemetry, network access, direct filesystem access, or undeclared dependencies. ✅ 2026-07-24
 
 ## Publication
 

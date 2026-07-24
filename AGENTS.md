@@ -9,7 +9,7 @@
 
 ## Current state
 
-This repository contains the in-progress `PARA Inbox Review` Obsidian community plugin. The automated Inbox workflow is implemented and tested through native-editor save, PARA input collection, transactional sorting, confirmed trash, and halted recovery rendering. Disposable-vault manual verification remains required. Scope is limited to compatible Inbox review; Capture, Home, general search, multi-note merge, and Daily notes remain outside this repository.
+This repository contains the implemented `PARA Inbox Review` Obsidian community plugin. The automated Inbox workflow covers native-editor save, PARA input collection, transactional sorting, confirmed trash, and halted recovery rendering. Automated tests and the first complete disposable-vault manual gate on Obsidian 1.12.7 pass; publication remains pending. Scope is limited to compatible Inbox review; Capture, Home, general search, multi-note merge, and Daily notes remain outside this repository.
 
 The plugin uses TypeScript, the official Obsidian API, npm, esbuild, and ESLint. Use `npm run check` before claiming changes are complete. Do not develop against the production vault; use a dedicated test vault.
 
