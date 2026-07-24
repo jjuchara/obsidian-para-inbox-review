@@ -19,3 +19,10 @@
 - Review collects every required value and completes preflight before the first mutation.
 - Required metadata is added only when missing, the note body is preserved, and the move occurs last.
 - A failed mutation compensates completed steps or halts with an exact recovery report.
+
+## 2026-07-24 — Keep queue and session behavior independent from Obsidian UI
+
+- Status: accepted and implemented for the initial domain slice.
+- The Obsidian adapter supplies typed file snapshots; pure domain code filters and orders the Inbox without accessing workspace state.
+- Session transitions are immutable and reject advancement outside the active state.
+- Skipped notes are retained separately so a finished pass cannot be confused with an empty Inbox.

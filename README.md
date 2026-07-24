@@ -4,7 +4,7 @@ An Obsidian community plugin for reviewing an Inbox as a predictable FIFO queue 
 
 ## Status
 
-The repository is initialized for development. The review workflow is not implemented yet.
+The repository is under active development. The pure FIFO loader and independent review session model are implemented and covered by automated tests; Obsidian UI and vault mutations are not implemented yet.
 
 ## Scope
 
@@ -18,6 +18,15 @@ The plugin will provide only the desktop Inbox review workflow shared with `nvim
 - stop with an exact recovery report if a multi-step mutation cannot be fully rolled back.
 
 Capture, Home, general search, multi-note merge, and Daily notes are outside this plugin.
+
+## Implemented foundation
+
+- direct-child Markdown filtering for the configured Inbox folder;
+- FIFO ordering by creation time with a deterministic path tie-breaker;
+- immutable source snapshots for later external-change preflight;
+- independent active, finished, paused, closed, and halted session states;
+- immutable complete, skip, pause, close, and halt transitions;
+- summaries that distinguish an empty Inbox from a pass completed with skipped notes.
 
 ## Development
 

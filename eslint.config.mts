@@ -35,4 +35,16 @@ export default defineConfig(
 			'obsidianmd/settings-tab/prefer-setting-definitions': 'off',
 		},
 	},
+	{
+		files: ['tests/**/*.ts'],
+		languageOptions: {
+			globals: {
+				...globals.node,
+			},
+		},
+		rules: {
+			// Tests run under Node and are excluded from the Obsidian bundle.
+			'obsidianmd/no-nodejs-modules': 'off',
+		},
+	},
 );

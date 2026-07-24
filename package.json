@@ -9,7 +9,7 @@
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
 		"lint": "eslint .",
-		"test": "node --test",
+		"test": "node --import tsx --test tests/**/*.test.ts",
 		"check": "npm run build && npm run lint && npm test"
 	},
 	"keywords": [
@@ -29,6 +29,7 @@
 		"jiti": "^2.6.1",
 		"obsidian": "latest",
 		"typescript": "^5.8.3",
-		"typescript-eslint": "^8.59.1"
+		"typescript-eslint": "^8.59.1",
+		"tsx": "^4.20.6"
 	}
 }

@@ -4,12 +4,13 @@
 
 `PARA Inbox Review` is an Obsidian UI adapter for the established Inbox review contract. It does not own capture, Home, search, merge, or Daily workflows.
 
-## Planned runtime model
+## Runtime model
 
 - Use an ordinary `MarkdownView` as the editor for the current note.
 - Use a dedicated `ItemView` for queue state, actions, prompts, and recovery output.
-- Build each pass from Markdown files directly under the configured Inbox folder, ordered oldest first by `TFile.stat.ctime` with a deterministic path tie-breaker.
-- Keep session state independent from workspace leaves so a view refresh cannot advance or corrupt the queue.
+- Each pass is built from Markdown files directly under the configured Inbox folder, ordered oldest first by `TFile.stat.ctime` with a deterministic path tie-breaker. The loader records `mtime` and size for later external-change preflight.
+- Session state is an immutable domain model independent from workspace leaves. It distinguishes active, finished, paused, closed, and halted states; only an active state can advance.
+- A skipped note leaves the current pass but remains in the Inbox summary. `inboxEmpty` is true only after every queued note was successfully processed and none was skipped.
 
 ## Official API boundary
 
