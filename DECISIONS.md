@@ -68,3 +68,21 @@
 - Status: accepted, implemented, regression-tested, and verified in Obsidian 1.12.7.
 - `FuzzySuggestModal` calls `onClose()` before `onChooseItem()` and a follow-up modal cannot safely mount inside the first modal's teardown.
 - The adapter records a later choice and resolves selection or cancellation on the next window macrotask. This preserves cancellation while allowing folder selection to continue into an area selector.
+
+## 2026-07-27 — Revalidate destructive trash after confirmation
+
+- Status: accepted, implemented, and regression-tested.
+- Trash saves and inspects the current source before confirmation, then repeats the inspection after confirmation and deletes only when file and metadata evidence still match.
+- A canceled confirmation or changed source leaves the note and active session unchanged.
+
+## 2026-07-27 — Restore exact property presence during compensation
+
+- Status: accepted, implemented, and regression-tested.
+- Compensation uses key presence rather than semantic non-emptiness, so existing empty strings and null values are restored exactly after a failed operation.
+- Non-empty malformed `tags` data fails closed before mutation instead of being silently replaced.
+
+## 2026-07-27 — Make pause and close editor-safe
+
+- Status: accepted, implemented, and regression-tested at the pure decision boundary.
+- Pause ends the review surface while keeping the current native editor open.
+- Close proceeds immediately for a clean editor; an unsaved editor requires an explicit save, discard, or cancel choice, and cancel preserves the active session.

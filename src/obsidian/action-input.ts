@@ -9,6 +9,11 @@ import {
 	type App,
 } from 'obsidian';
 import type { ParaCategory } from '../domain/operation-plan';
+import {
+	applyEditorExitChoice,
+	hasUnsavedEditorChanges,
+	type EditorExitChoice,
+} from '../editor-exit';
 import type { ParaActionInputPort } from '../para-action-service';
 import { ChoiceSettlement } from '../choice-settlement';
 
@@ -119,12 +124,59 @@ class ConfirmationModal extends Modal {
 	}
 }
 
+class EditorExitModal extends Modal {
+	private settled = false;
+
+	constructor(
+		app: App,
+		private readonly resolveChoice: (choice: EditorExitChoice) => void,
+	) {
+		super(app);
+		this.setTitle('Close inbox review?');
+	}
+
+	onOpen(): void {
+		this.contentEl.createEl('p', {
+			text: 'The current note has unsaved changes.',
+		});
+		const actions = this.contentEl.createDiv();
+		for (const [label, choice] of [
+			['Cancel', 'cancel'],
+			['Discard and close', 'discard'],
+			['Save and close', 'save'],
+		] as const) {
+			const button = actions.createEl('button', { text: label });
+			button.addEventListener('click', () => this.finish(choice));
+		}
+	}
+
+	onClose(): void {
+		if (!this.settled) this.resolveChoice('cancel');
+		this.contentEl.empty();
+	}
+
+	private finish(choice: EditorExitChoice): void {
+		this.settled = true;
+		this.resolveChoice(choice);
+		this.close();
+	}
+}
+
 function choose(
 	app: App,
 	choices: readonly string[],
 	title: string,
 ): Promise<string | null> {
 	return new Promise((resolve) => new ChoiceModal(app, choices, resolve, title).open());
+}
+
+function sourceView(app: App, path: string): MarkdownView | null {
+	for (const leaf of app.workspace.getLeavesOfType('markdown')) {
+		if (leaf.view instanceof MarkdownView && leaf.view.file?.path === path) {
+			return leaf.view;
+		}
+	}
+	return null;
 }
 
 function folderChoices(app: App, configuredRoot: string): string[] {
@@ -158,12 +210,7 @@ function areaChoices(app: App): string[] {
 export function createObsidianActionInput(app: App): ParaActionInputPort {
 	return {
 		async saveSource(path) {
-			for (const leaf of app.workspace.getLeavesOfType('markdown')) {
-				if (leaf.view instanceof MarkdownView && leaf.view.file?.path === path) {
-					await leaf.view.save();
-					return;
-				}
-			}
+			await sourceView(app, path)?.save();
 		},
 		selectFolder(category: ParaCategory, root: string) {
 			return choose(app, folderChoices(app, root), `Select ${category} folder`);
@@ -185,4 +232,23 @@ export function confirmTrash(app: App, path: string): Promise<boolean> {
 	return new Promise((resolve) =>
 		new ConfirmationModal(app, `Move ${path} to your configured Obsidian trash?`, resolve).open(),
 	);
+}
+
+export async function prepareReviewClose(app: App, path: string): Promise<boolean> {
+	const view = sourceView(app, path);
+	if (!view) return true;
+	const port = {
+		getCurrentData: () => view.getViewData(),
+		getSavedData: () => view.data,
+		save: () => view.save(),
+		discard: () => {
+			view.setViewData(view.data, true);
+		},
+	};
+	if (!hasUnsavedEditorChanges(port)) return true;
+
+	const choice = await new Promise<EditorExitChoice>((resolve) =>
+		new EditorExitModal(app, resolve).open(),
+	);
+	return applyEditorExitChoice(port, choice);
 }

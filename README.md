@@ -4,7 +4,7 @@ An Obsidian community plugin for reviewing an Inbox as a predictable FIFO queue 
 
 ## Status
 
-The Inbox review workflow is implemented and covered by automated tests, including native-editor save, PARA input collection, transactional sorting, confirmed trash, and halted recovery output. The complete workflow has also passed its first manual gate in a disposable vault on Obsidian 1.12.7; the plugin has not been published yet.
+The Inbox review workflow is implemented and covered by automated tests, including native-editor save, PARA input collection, transactional sorting, revalidated trash, safe close choices, and halted recovery output. The original complete workflow passed a manual gate in a disposable vault on Obsidian 1.12.7. The 2026-07-27 safety hardening passes 56 automated tests and requires a focused disposable-vault recheck before publication; the plugin has not been published yet.
 
 ## Scope
 
@@ -31,14 +31,16 @@ Capture, Home, general search, multi-note merge, and Daily notes are outside thi
 - an async transaction executor that rechecks file and metadata snapshots, blocks destination conflicts, applies properties in order, moves last, and reports complete or incomplete rollback.
 - an Obsidian mutation adapter that performs typed Markdown lookup, reads fresh frontmatter snapshots, uses atomic frontmatter edits, moves through `FileManager.renameFile()`, and sends confirmed deletions through `FileManager.trashFile()`.
 - the `Open inbox review` command and ribbon action, a native editor for the current FIFO note, and an `ItemView` with queue status, skip, and pause controls.
-- Projects, Areas, Resources, and Archives controls with nested destination-folder selection, existing `#area` note selection when required, archive-reason input, skip, pause, close, transaction results, and exact halted recovery output.
-- confirmed movement to the user's configured Obsidian trash; permanent deletion is not exposed.
+- Projects, Areas, Resources, and Archives controls in an evenly spaced category row, with skip, pause, trash, and close grouped in a separate review-control row that wraps safely on narrow sidebars.
+- Nested destination-folder selection, existing `#area` note selection when required, archive-reason input, transaction results, and exact halted recovery output.
+- confirmed movement to the user's configured Obsidian trash only after a second source snapshot matches the pre-confirmation baseline; permanent deletion is not exposed.
+- pause returns to the native editor, while close offers save, discard, and safe cancel when the current editor has unsaved changes.
 
 ## Commands
 
 - `Open inbox review` rebuilds the FIFO queue, opens the oldest note in Obsidian's native Markdown editor, and reveals the review view.
 
-Before a PARA action, the plugin saves the current native Markdown view, reads a fresh source snapshot, collects every required input, and then revalidates the source immediately before the first mutation. Canceling a selector or prompt leaves the note and session unchanged.
+Before a PARA action, the plugin saves the current native Markdown view, reads a fresh source snapshot, collects every required input, and then revalidates the source immediately before the first mutation. Trash follows the same safety shape: save, inspect, confirm, inspect again, and delete only if both inspections match. Canceling a selector or prompt leaves the note and session unchanged.
 
 ## Settings
 

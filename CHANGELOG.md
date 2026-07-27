@@ -19,3 +19,8 @@ All notable changes to this project will be documented in this file.
 - Added explicit trash confirmation backed by the user's configured Obsidian trash and advanced the isolated gate to 43 tests.
 - Fixed Obsidian `FuzzySuggestModal` lifecycle handling so a selected folder is not mistaken for cancellation and a following area selector mounts only after the first modal has fully closed; the isolated gate now passes 45 tests.
 - Completed the Obsidian 1.12.7 disposable-vault gate for native save, all PARA categories, nested folder and area selection, prompt cancellation, skip, pause, close, trash cancellation/success, destination conflict, complete rollback, and incomplete rollback with exact halted recovery output.
+- Revalidated the source file and metadata after trash confirmation so external changes block deletion.
+- Restored exact empty and null metadata values during compensation and rejected malformed non-empty `tags` before mutation.
+- Made pause return to the native editor and made close require save, discard, or cancel for unsaved editor changes.
+- Expanded the automated gate from 45 to 56 tests; a focused disposable-vault recheck of the hardened Trash and Close flows remains required before publication.
+- Split the review controls into a padded PARA-category row and a separate session-action row, with responsive wrapping for narrow Obsidian sidebars.

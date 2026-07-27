@@ -8,10 +8,12 @@
 
 - Use an ordinary `MarkdownView` as the editor for the current note.
 - Use a dedicated `ItemView` for queue state, actions, prompts, and recovery output.
+- Render PARA destinations and review lifecycle controls as two semantic flex rows. Category buttons share available width; both rows wrap without clipping in narrow sidebars, using a plugin-local `styles.css` with native Obsidian button appearance.
 - Each pass is built from Markdown files directly under the configured Inbox folder, ordered oldest first by `TFile.stat.ctime` with a deterministic path tie-breaker. The loader records `mtime` and size for later external-change preflight.
 - Session state is an immutable domain model independent from workspace leaves. It distinguishes active, finished, paused, closed, and halted states; only an active state can advance.
 - A skipped note leaves the current pass but remains in the Inbox summary. `inboxEmpty` is true only after every queued note was successfully processed and none was skipped.
 - A tested review controller owns the current session independently from the view, serializes asynchronous navigation, and commits a skip only after the next note opens successfully. The plugin lifecycle registers the command, ribbon action, and `ItemView`; the current note opens in a normal workspace leaf.
+- Pause commits a terminal session and detaches the review leaf, leaving the current native editor in place. Close compares the editor contents with its saved data and, when necessary, requires an explicit save, discard, or cancel choice before closing the session.
 
 ## Official API boundary
 
@@ -43,6 +45,10 @@ The executor depends on a narrow asynchronous mutation port instead of Obsidian 
 
 The concrete Obsidian adapter is now implemented behind that port. It rejects absolute, traversal, backslash, and non-Markdown paths before lookup; resolves source files with a typed `TFile` check; reads current note content through `Vault.read()` and parses its frontmatter with `getFrontMatterInfo()` plus `parseYaml()` rather than relying on a potentially stale metadata cache; and rejects a file whose `mtime` or size changes during inspection. Each property mutation uses `processFrontMatter()`, moving uses `renameFile()`, and trashing uses `trashFile()`. Adapter behavior is tested through a structural boundary so automated tests never load or mutate a real vault.
 
+Trash is a separate tested action transaction. It saves the native editor, captures fresh file and metadata evidence, asks for confirmation, captures the evidence again, and calls `trashFile()` only when both inspections match. Cancellation and a changed source remain mutation-free.
+
 The PARA action service composes the pure planner and executor. It first calls `MarkdownView.save()` for the active source, obtains a fresh file/metadata snapshot, then collects an existing destination folder and any missing area or archive reason. The executor performs a second inspection after those prompts, so native edits made before the action are accepted while changes during the action are rejected. Folder and area discovery may use current vault objects and metadata cache because they are UI choices, not safety snapshots. A successful action completes the queue item; cancellation, preflight failure, or complete rollback keeps it active; incomplete rollback halts the session with exact recovery details.
 
 Obsidian's `FuzzySuggestModal` closes before it invokes `onChooseItem()`. Choice settlement therefore records the selected value and resolves the awaiting action on the next window macrotask after `onClose()`. This both distinguishes a real selection from cancellation and prevents a second selector from being mounted inside the first modal's teardown lifecycle.
+
+Rollback distinguishes property presence from semantic emptiness. If a required property existed as an empty string or `null`, compensation restores that exact value instead of deleting the key. A malformed non-empty `tags` value fails closed before any metadata mutation rather than being overwritten during normalization.

@@ -4,6 +4,7 @@ import type { RecoveryDetails } from './domain/transaction-executor';
 import {
 	confirmTrash,
 	createObsidianActionInput,
+	prepareReviewClose,
 } from './obsidian/action-input';
 import { loadInboxQueue } from './obsidian/inbox-loader';
 import { createObsidianMutationAdapter } from './obsidian/mutation-adapter';
@@ -23,6 +24,8 @@ import {
 	ParaInboxReviewSettingTab,
 	type ParaInboxReviewSettings,
 } from './settings';
+import { executeTrashAction } from './trash-action-service';
+import { currentInboxItem } from './domain/review-session';
 
 export default class ParaInboxReviewPlugin extends Plugin {
 	settings: ParaInboxReviewSettings = DEFAULT_SETTINGS;
@@ -86,13 +89,17 @@ export default class ParaInboxReviewPlugin extends Plugin {
 	pauseReview(): void {
 		try {
 			this.reviewController.pause();
+			this.app.workspace.detachLeavesOfType(REVIEW_VIEW_TYPE);
 		} catch (error) {
 			new Notice(this.errorMessage(error));
 		}
 	}
 
-	closeReview(): void {
+	async closeReview(): Promise<void> {
 		try {
+			const session = this.reviewController.getSession();
+			const item = session ? currentInboxItem(session) : null;
+			if (item && !await prepareReviewClose(this.app, item.path)) return;
 			this.reviewController.close();
 			this.app.workspace.detachLeavesOfType(REVIEW_VIEW_TYPE);
 		} catch (error) {
@@ -124,14 +131,23 @@ export default class ParaInboxReviewPlugin extends Plugin {
 
 	async trashReview(): Promise<void> {
 		try {
-			await this.reviewController.performCurrent(async (item) => {
-				if (!await confirmTrash(this.app, item.path)) {
-					return { transition: 'stay', result: false } as const;
-				}
-				await this.actionInput.saveSource(item.path);
-				await this.mutation.trashFile(item.path);
-				return { transition: 'complete', result: true } as const;
+			const result = await this.reviewController.performCurrent(async (item) => {
+				const action = await executeTrashAction({
+					path: item.path,
+					mutation: this.mutation,
+					input: {
+						saveSource: (path) => this.actionInput.saveSource(path),
+						confirm: (path) => confirmTrash(this.app, path),
+					},
+				});
+				return {
+					transition: action.ok ? 'complete' : 'stay',
+					result: action,
+				} as const;
 			});
+			if (!result.ok && result.kind === 'source_changed') {
+				new Notice(result.message);
+			}
 		} catch (error) {
 			new Notice(this.errorMessage(error));
 		}

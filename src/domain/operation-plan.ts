@@ -67,6 +67,9 @@ function hasValue(value: unknown): boolean {
 function tagList(value: unknown): unknown[] {
 	if (Array.isArray(value)) return clone(value);
 	if (typeof value === 'string' && value.trim().length > 0) return [value];
+	if (value !== null && value !== undefined && value !== '') {
+		throw new Error('The tags property must be a string or list');
+	}
 	return [];
 }
 
@@ -189,7 +192,7 @@ export function buildParaOperationPlan(options: {
 		.reverse()
 		.map((step) => {
 			const oldValue = options.existing[step.name];
-			return hasValue(oldValue)
+			return Object.prototype.hasOwnProperty.call(options.existing, step.name)
 				? {
 					action: 'set' as const,
 					name: step.name,

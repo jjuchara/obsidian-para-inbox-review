@@ -175,3 +175,38 @@ void test('normalizes string tags and does not duplicate hash-prefixed tags', ()
 	assert.deepEqual(fromString.metadata.tags, ['existing', 'area']);
 	assert.deepEqual(alreadyPresent.additions, []);
 });
+
+void test('rejects a malformed non-empty tags property before mutation', () => {
+	assert.throws(
+		() => normalizeParaMetadata(
+			'projects',
+			{ tags: 42, created: 'old', area: '[[Work]]' },
+			{},
+			CONFIG,
+		),
+		/The tags property must be a string or list/u,
+	);
+});
+
+void test('restores present empty values instead of deleting them during rollback', () => {
+	const plan = buildParaOperationPlan({
+		path: '6. Inbox/Note.md',
+		destination: '1. Projects/Note.md',
+		category: 'projects',
+		existing: {
+			created: '',
+			tags: '',
+			links: null,
+			area: '[[Work]]',
+		},
+		context: { created: 'now' },
+		config: CONFIG,
+	});
+
+	assert.deepEqual(plan.compensate, [
+		{ action: 'remove', name: 'status' },
+		{ action: 'set', name: 'links', value: null, type: 'text' },
+		{ action: 'set', name: 'tags', value: '', type: 'list' },
+		{ action: 'set', name: 'created', value: '', type: 'datetime' },
+	]);
+});

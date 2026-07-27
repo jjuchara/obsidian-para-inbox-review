@@ -4,6 +4,7 @@ import type {
 	ParaOperationPlan,
 	PropertyAddition,
 } from './operation-plan';
+import { sourceInspectionsEqual } from '../source-snapshot';
 
 export interface FileMutationSnapshot {
 	mtime: number;
@@ -61,39 +62,6 @@ function errorMessage(error: unknown): string {
 	return error instanceof Error ? error.message : String(error);
 }
 
-function valuesEqual(left: unknown, right: unknown): boolean {
-	if (Object.is(left, right)) return true;
-	if (Array.isArray(left) || Array.isArray(right)) {
-		return Array.isArray(left) && Array.isArray(right) &&
-			left.length === right.length &&
-			left.every((value, index) => valuesEqual(value, right[index]));
-	}
-	if (
-		left === null || right === null ||
-		typeof left !== 'object' || typeof right !== 'object'
-	) {
-		return false;
-	}
-
-	const leftRecord = left as Record<string, unknown>;
-	const rightRecord = right as Record<string, unknown>;
-	const leftKeys = Object.keys(leftRecord).sort();
-	const rightKeys = Object.keys(rightRecord).sort();
-	return leftKeys.length === rightKeys.length &&
-		leftKeys.every(
-			(key, index) =>
-				key === rightKeys[index] &&
-				valuesEqual(leftRecord[key], rightRecord[key]),
-		);
-}
-
-function fileSnapshotsEqual(
-	left: FileMutationSnapshot,
-	right: FileMutationSnapshot,
-): boolean {
-	return left.mtime === right.mtime && left.size === right.size;
-}
-
 async function runCompensation(
 	port: ParaMutationPort,
 	path: string,
@@ -138,10 +106,10 @@ export async function executeParaOperation(options: {
 		};
 	}
 
-	if (
-		!fileSnapshotsEqual(inspection.file, expectedFile) ||
-		!valuesEqual(inspection.metadata, plan.snapshot)
-	) {
+	if (!sourceInspectionsEqual(inspection, {
+		file: expectedFile,
+		metadata: plan.snapshot,
+	})) {
 		return {
 			ok: false,
 			kind: 'preflight',

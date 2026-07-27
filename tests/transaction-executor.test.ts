@@ -222,3 +222,45 @@ void test('reports exact details when rollback is incomplete', async () => {
 		});
 	}
 });
+
+void test('a failed move restores present empty metadata values exactly', async () => {
+	const existing = {
+		created: '',
+		tags: '',
+		links: null,
+		area: '[[Work]]',
+	};
+	const rollbackPlan = buildParaOperationPlan({
+		path: '6. Inbox/Note.md',
+		destination: '1. Projects/Note.md',
+		category: 'projects',
+		existing,
+		context: { created: 'now' },
+		config: { projectsLink: '[[My Projects]]' },
+	});
+	const metadata: Record<string, unknown> = structuredClone(existing);
+	const mutation = port({
+		async inspectSource() {
+			return { file: EXPECTED_FILE, metadata: structuredClone(existing) };
+		},
+		async setProperty(_path, step) {
+			metadata[step.name] = structuredClone(step.value);
+		},
+		async removeProperty(_path, name) {
+			delete metadata[name];
+		},
+		async moveFile() {
+			throw new Error('move failed');
+		},
+	});
+
+	const result = await executeParaOperation({
+		plan: rollbackPlan,
+		expectedFile: EXPECTED_FILE,
+		port: mutation.port,
+	});
+
+	assert.equal(result.ok, false);
+	assert.equal(result.kind, 'rolled_back');
+	assert.deepEqual(metadata, existing);
+});
