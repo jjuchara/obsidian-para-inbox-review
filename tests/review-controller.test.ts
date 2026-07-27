@@ -86,6 +86,29 @@ void test('pending actions are exclusive and listeners receive state changes', a
 	assert.deepEqual(states, [null, null, 'active', 'active']);
 });
 
+void test('current review actions are available only for an idle active item', async () => {
+	const setup = fixture();
+	assert.equal(setup.controller.canRunCurrentAction(), false);
+
+	await setup.controller.start();
+	assert.equal(setup.controller.canRunCurrentAction(), true);
+
+	let releaseAction!: () => void;
+	const action = setup.controller.performCurrent(async () => {
+		await new Promise<void>((resolve) => {
+			releaseAction = resolve;
+		});
+		return { transition: 'stay', result: null };
+	});
+	assert.equal(setup.controller.canRunCurrentAction(), false);
+	releaseAction();
+	await action;
+	assert.equal(setup.controller.canRunCurrentAction(), true);
+
+	setup.controller.pause();
+	assert.equal(setup.controller.canRunCurrentAction(), false);
+});
+
 void test('pause preserves the current note and closes advancement', async () => {
 	const setup = fixture();
 	await setup.controller.start();

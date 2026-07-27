@@ -24,3 +24,26 @@
 .para-inbox-review-session-actions > button {
 	flex: 0 1 auto;
 }
+
+.para-inbox-review-hotkey-hint {
+	margin: 0;
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+.para-inbox-review-modal-input {
+	width: 100%;
+}
+
+.para-inbox-review-modal-actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: var(--size-4-2, 8px);
+	padding-block: var(--size-4-3, 12px) var(--size-4-1, 4px);
+}
+
+.para-inbox-review-modal-actions > button {
+	min-height: 32px;
+	margin: 0;
+}

@@ -63,13 +63,17 @@ class TextPromptModal extends Modal {
 
 	onOpen(): void {
 		this.input = this.contentEl.createEl('input', {
+			cls: 'para-inbox-review-modal-input',
 			type: 'text',
 			placeholder: 'Required',
 		});
 		this.input.addEventListener('keydown', (event) => {
 			if (event.key === 'Enter') this.submit();
 		});
-		const submit = this.contentEl.createEl('button', { text: 'Continue' });
+		const actions = this.contentEl.createDiv({
+			cls: 'para-inbox-review-modal-actions',
+		});
+		const submit = actions.createEl('button', { text: 'Continue' });
 		submit.addEventListener('click', () => this.submit());
 		this.input.focus();
 	}
@@ -105,7 +109,9 @@ class ConfirmationModal extends Modal {
 
 	onOpen(): void {
 		this.contentEl.createEl('p', { text: this.message });
-		const actions = this.contentEl.createDiv();
+		const actions = this.contentEl.createDiv({
+			cls: 'para-inbox-review-modal-actions',
+		});
 		const cancel = actions.createEl('button', { text: 'Cancel' });
 		cancel.addEventListener('click', () => this.finish(false));
 		const confirm = actions.createEl('button', { text: 'Move to trash' });
@@ -139,7 +145,9 @@ class EditorExitModal extends Modal {
 		this.contentEl.createEl('p', {
 			text: 'The current note has unsaved changes.',
 		});
-		const actions = this.contentEl.createDiv();
+		const actions = this.contentEl.createDiv({
+			cls: 'para-inbox-review-modal-actions',
+		});
 		for (const [label, choice] of [
 			['Cancel', 'cancel'],
 			['Discard and close', 'discard'],

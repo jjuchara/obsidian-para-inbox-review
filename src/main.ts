@@ -11,6 +11,7 @@ import { createObsidianMutationAdapter } from './obsidian/mutation-adapter';
 import type { ObsidianMutationPort } from './obsidian/mutation-port';
 import {
 	ParaInboxReviewView,
+	REVIEW_ICON,
 	REVIEW_VIEW_TYPE,
 } from './obsidian/review-view';
 import { ReviewController } from './review-controller';
@@ -26,6 +27,10 @@ import {
 } from './settings';
 import { executeTrashAction } from './trash-action-service';
 import { currentInboxItem } from './domain/review-session';
+import {
+	REVIEW_COMMANDS,
+	type ReviewCommandAction,
+} from './review-commands';
 
 export default class ParaInboxReviewPlugin extends Plugin {
 	settings: ParaInboxReviewSettings = DEFAULT_SETTINGS;
@@ -58,12 +63,8 @@ export default class ParaInboxReviewPlugin extends Plugin {
 			REVIEW_VIEW_TYPE,
 			(leaf) => new ParaInboxReviewView(leaf, this),
 		);
-		this.addCommand({
-			id: 'open-inbox-review',
-			name: 'Open inbox review',
-			callback: () => void this.startReview(),
-		});
-		this.addRibbonIcon('inbox', 'Open inbox review', () => {
+		this.registerReviewCommands();
+		this.addRibbonIcon(REVIEW_ICON, 'Open inbox review', () => {
 			void this.startReview();
 		});
 		this.addSettingTab(new ParaInboxReviewSettingTab(this.app, this));
@@ -150,6 +151,39 @@ export default class ParaInboxReviewPlugin extends Plugin {
 			}
 		} catch (error) {
 			new Notice(this.errorMessage(error));
+		}
+	}
+
+	private registerReviewCommands(): void {
+		for (const command of REVIEW_COMMANDS) {
+			if (command.action.kind === 'open') {
+				this.addCommand({
+					id: command.id,
+					name: command.name,
+					callback: () => this.runReviewCommand(command.action),
+				});
+				continue;
+			}
+			this.addCommand({
+				id: command.id,
+				name: command.name,
+				checkCallback: (checking) => {
+					if (!this.reviewController.canRunCurrentAction()) return false;
+					if (!checking) this.runReviewCommand(command.action);
+					return true;
+				},
+			});
+		}
+	}
+
+	private runReviewCommand(action: ReviewCommandAction): void {
+		switch (action.kind) {
+			case 'open': void this.startReview(); break;
+			case 'sort': void this.sortReview(action.category); break;
+			case 'skip': void this.skipReview(); break;
+			case 'pause': this.pauseReview(); break;
+			case 'trash': void this.trashReview(); break;
+			case 'close': void this.closeReview(); break;
 		}
 	}
 

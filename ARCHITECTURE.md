@@ -9,10 +9,12 @@
 - Use an ordinary `MarkdownView` as the editor for the current note.
 - Use a dedicated `ItemView` for queue state, actions, prompts, and recovery output.
 - Render PARA destinations and review lifecycle controls as two semantic flex rows. Category buttons share available width; both rows wrap without clipping in narrow sidebars, using a plugin-local `styles.css` with native Obsidian button appearance.
+- Use the native Lucide `list-checks` icon for both the ribbon action and review view. Plugin-owned prompt, confirmation, and editor-exit modals share one scoped action-row class with theme spacing and native buttons.
 - Each pass is built from Markdown files directly under the configured Inbox folder, ordered oldest first by `TFile.stat.ctime` with a deterministic path tie-breaker. The loader records `mtime` and size for later external-change preflight.
 - Session state is an immutable domain model independent from workspace leaves. It distinguishes active, finished, paused, closed, and halted states; only an active state can advance.
 - A skipped note leaves the current pass but remains in the Inbox summary. `inboxEmpty` is true only after every queued note was successfully processed and none was skipped.
-- A tested review controller owns the current session independently from the view, serializes asynchronous navigation, and commits a skip only after the next note opens successfully. The plugin lifecycle registers the command, ribbon action, and `ItemView`; the current note opens in a normal workspace leaf.
+- A tested review controller owns the current session independently from the view, serializes asynchronous navigation, and commits a skip only after the next note opens successfully. The plugin lifecycle registers nine commands, the ribbon action, and `ItemView`; the current note opens in a normal workspace leaf.
+- The opening command is always available. The eight current-item commands use `checkCallback()` and are exposed to Obsidian's Hotkeys settings only while an idle active item exists; no default hotkeys are registered, and the review view keeps a compact Settings → Hotkeys hint visible.
 - Pause commits a terminal session and detaches the review leaf, leaving the current native editor in place. Close compares the editor contents with its saved data and, when necessary, requires an explicit save, discard, or cancel choice before closing the session.
 
 ## Official API boundary

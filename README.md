@@ -4,7 +4,7 @@ An Obsidian community plugin for reviewing an Inbox as a predictable FIFO queue 
 
 ## Status
 
-The Inbox review workflow is implemented and covered by automated tests, including native-editor save, PARA input collection, transactional sorting, revalidated trash, safe close choices, and halted recovery output. The original complete workflow passed a manual gate in a disposable vault on Obsidian 1.12.7. The 2026-07-27 safety hardening passes 56 automated tests and requires a focused disposable-vault recheck before publication; the plugin has not been published yet.
+The Inbox review workflow is implemented and covered by 58 automated tests, including native-editor save, PARA input collection, transactional sorting, revalidated trash, safe close choices, assignable commands, and halted recovery output. The complete workflow and the 2026-07-27 safety hardening passed focused manual gates on Obsidian 1.12.7; the owner also confirmed the ribbon/view icon, modal spacing, and assigned-hotkey flows in the production profile after explicitly installing the release candidate. Version 0.1.0 is ready for publication.
 
 ## Scope
 
@@ -30,15 +30,27 @@ Capture, Home, general search, multi-note merge, and Daily notes are outside thi
 - a pure PARA metadata planner that preserves existing values, reports missing input, moves last, and emits reverse compensation steps.
 - an async transaction executor that rechecks file and metadata snapshots, blocks destination conflicts, applies properties in order, moves last, and reports complete or incomplete rollback.
 - an Obsidian mutation adapter that performs typed Markdown lookup, reads fresh frontmatter snapshots, uses atomic frontmatter edits, moves through `FileManager.renameFile()`, and sends confirmed deletions through `FileManager.trashFile()`.
-- the `Open inbox review` command and ribbon action, a native editor for the current FIFO note, and an `ItemView` with queue status, skip, and pause controls.
+- a shared native `list-checks` icon for the ribbon action and review view, a native editor for the current FIFO note, and an `ItemView` with queue status and review controls.
 - Projects, Areas, Resources, and Archives controls in an evenly spaced category row, with skip, pause, trash, and close grouped in a separate review-control row that wraps safely on narrow sidebars.
 - Nested destination-folder selection, existing `#area` note selection when required, archive-reason input, transaction results, and exact halted recovery output.
 - confirmed movement to the user's configured Obsidian trash only after a second source snapshot matches the pre-confirmation baseline; permanent deletion is not exposed.
 - pause returns to the native editor, while close offers save, discard, and safe cancel when the current editor has unsaved changes.
+- plugin-scoped modal action rows with theme spacing, wrapping, and native Obsidian buttons.
+- nine Obsidian commands that users can bind in Settings → Hotkeys; action commands are disabled unless an idle active item exists, the plugin defines no default hotkeys, and the review controls keep the assignment location visible.
 
 ## Commands
 
 - `Open inbox review` rebuilds the FIFO queue, opens the oldest note in Obsidian's native Markdown editor, and reveals the review view.
+- `Sort current note into Projects`
+- `Sort current note into Areas`
+- `Sort current note into Resources`
+- `Sort current note into Archives`
+- `Skip current note`
+- `Pause inbox review`
+- `Move current note to trash`
+- `Close inbox review`
+
+Assign any of these commands in Obsidian's Settings → Hotkeys. Only `Open inbox review` is available without an active review item; no command has a default hotkey.
 
 Before a PARA action, the plugin saves the current native Markdown view, reads a fresh source snapshot, collects every required input, and then revalidates the source immediately before the first mutation. Trash follows the same safety shape: save, inspect, confirm, inspect again, and delete only if both inspections match. Canceling a selector or prompt leaves the note and session unchanged.
 

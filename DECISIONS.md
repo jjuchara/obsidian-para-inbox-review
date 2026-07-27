@@ -86,3 +86,10 @@
 - Status: accepted, implemented, and regression-tested at the pure decision boundary.
 - Pause ends the review surface while keeping the current native editor open.
 - Close proceeds immediately for a clean editor; an unsaved editor requires an explicit save, discard, or cancel choice, and cancel preserves the active session.
+
+## 2026-07-27 — Use native iconography and Obsidian hotkey assignment
+
+- Status: accepted, implemented, and covered by contract tests.
+- The ribbon action and review view share the native Lucide `list-checks` icon; the manifest gains no non-standard icon field and the plugin ships no custom SVG.
+- Opening plus the eight active-review actions are registered as Obsidian commands. Users assign shortcuts in Settings → Hotkeys, while the plugin intentionally defines no default hotkeys.
+- Current-item commands are available only for an idle active item, so a shortcut cannot bypass pending-action safety. Plugin-owned modal action rows use scoped CSS, theme spacing variables, and native Obsidian buttons.

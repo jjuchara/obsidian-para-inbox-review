@@ -7,6 +7,7 @@ import {
 import type ParaInboxReviewPlugin from '../main';
 
 export const REVIEW_VIEW_TYPE = 'para-inbox-review';
+export const REVIEW_ICON = 'list-checks';
 
 export class ParaInboxReviewView extends ItemView {
 	private unsubscribe: (() => void) | null = null;
@@ -27,7 +28,7 @@ export class ParaInboxReviewView extends ItemView {
 	}
 
 	getIcon(): string {
-		return 'inbox';
+		return REVIEW_ICON;
 	}
 
 	onOpen(): Promise<void> {
@@ -95,6 +96,10 @@ export class ParaInboxReviewView extends ItemView {
 			const close = reviewActions.createEl('button', { text: 'Close review' });
 			close.disabled = this.plugin.reviewController.isPending();
 			close.addEventListener('click', () => void this.plugin.closeReview());
+			actions.createEl('p', {
+				cls: 'para-inbox-review-hotkey-hint',
+				text: 'Assign shortcuts in hotkey settings.',
+			});
 			return;
 		}
 

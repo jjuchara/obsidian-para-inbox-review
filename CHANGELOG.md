@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 0.1.0 - 2026-07-27
 
 - Initialized the Obsidian community plugin development repository from the official sample template.
 - Added explicit Inbox and PARA folder settings.
@@ -22,5 +22,8 @@ All notable changes to this project will be documented in this file.
 - Revalidated the source file and metadata after trash confirmation so external changes block deletion.
 - Restored exact empty and null metadata values during compensation and rejected malformed non-empty `tags` before mutation.
 - Made pause return to the native editor and made close require save, discard, or cancel for unsaved editor changes.
-- Expanded the automated gate from 45 to 56 tests; a focused disposable-vault recheck of the hardened Trash and Close flows remains required before publication.
+- Expanded the automated gate from 45 to 56 tests and completed the focused disposable-vault recheck of the hardened Trash and Close flows.
 - Split the review controls into a padded PARA-category row and a separate session-action row, with responsive wrapping for narrow Obsidian sidebars.
+- Added a shared native `list-checks` icon to the ribbon action and review view, plus scoped padding and gap for prompt, trash-confirmation, and editor-exit modal actions.
+- Registered opening, four PARA actions, skip, pause, trash, and close as nine user-assignable Obsidian commands without default hotkeys; current-item commands are unavailable outside an idle active session, and the review controls keep a compact Hotkeys hint visible.
+- Expanded the automated gate to 58 tests; the owner confirmed the icon, modal spacing, and assigned-hotkey flows on Obsidian 1.12.7 after explicitly installing the release candidate in the production profile.

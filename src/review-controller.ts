@@ -38,6 +38,11 @@ export class ReviewController {
 		return this.pending;
 	}
 
+	canRunCurrentAction(): boolean {
+		return !this.pending && this.session !== null &&
+			currentInboxItem(this.session) !== null;
+	}
+
 	subscribe(listener: ReviewSessionListener): () => void {
 		this.listeners.add(listener);
 		listener(this.session);
