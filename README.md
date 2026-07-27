@@ -4,7 +4,7 @@ An Obsidian community plugin for reviewing an Inbox as a predictable FIFO queue 
 
 ## Status
 
-The Inbox review workflow is implemented and covered by 58 automated tests, including native-editor save, PARA input collection, transactional sorting, revalidated trash, safe close choices, assignable commands, and halted recovery output. The complete workflow and the 2026-07-27 safety hardening passed focused manual gates on Obsidian 1.12.7; the owner also confirmed the ribbon/view icon, modal spacing, and assigned-hotkey flows in the production profile after explicitly installing the release candidate. Version 0.1.0 is ready for publication.
+The Inbox review workflow is implemented and covered by 58 automated tests, including native-editor save, PARA input collection, transactional sorting, revalidated trash, safe close choices, assignable commands, and halted recovery output. The complete workflow and the 2026-07-27 safety hardening passed focused manual gates on Obsidian 1.12.7; the owner also confirmed the ribbon/view icon, modal spacing, and assigned-hotkey flows in the production profile after explicitly installing the release candidate. [Version 0.1.0](https://github.com/jjuchara/obsidian-para-inbox-review/releases/tag/0.1.0) is published; submission to the Obsidian Community Directory is pending owner authentication.
 
 ## Scope
 

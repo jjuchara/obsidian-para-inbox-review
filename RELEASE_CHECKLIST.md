@@ -14,6 +14,7 @@
 
 ## Publication
 
-- [ ] The release tag exactly matches the manifest version and has no leading `v`.
-- [ ] The GitHub release includes `main.js`, `manifest.json`, and `styles.css` only when styles exist.
-- [ ] The release notes describe shipped behavior rather than planned behavior.
+- [x] The release tag exactly matches the manifest version and has no leading `v`; `0.1.0` resolves to commit `70be0386c5a2d129d36d5a8b0044c38f4ab0c052`. ✅ 2026-07-27
+- [x] The GitHub release includes `main.js`, `manifest.json`, and `styles.css`; downloaded assets match the local SHA-256 checksums. ✅ 2026-07-27
+- [x] The release notes describe shipped behavior rather than planned behavior. ✅ 2026-07-27
+- [ ] The repository is submitted through `community.obsidian.md/plugins/new` after owner sign-in and GitHub linking.

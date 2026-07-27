@@ -27,3 +27,4 @@ All notable changes to this project will be documented in this file.
 - Added a shared native `list-checks` icon to the ribbon action and review view, plus scoped padding and gap for prompt, trash-confirmation, and editor-exit modal actions.
 - Registered opening, four PARA actions, skip, pause, trash, and close as nine user-assignable Obsidian commands without default hotkeys; current-item commands are unavailable outside an idle active session, and the review controls keep a compact Hotkeys hint visible.
 - Expanded the automated gate to 58 tests; the owner confirmed the icon, modal spacing, and assigned-hotkey flows on Obsidian 1.12.7 after explicitly installing the release candidate in the production profile.
+- Published GitHub Release 0.1.0 from commit `70be0386c5a2d129d36d5a8b0044c38f4ab0c052` after a green CI run; the three downloaded release assets matched the local SHA-256 checksums.
