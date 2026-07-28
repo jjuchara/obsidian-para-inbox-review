@@ -56,6 +56,8 @@ class TextPromptModal extends Modal {
 		app: App,
 		private readonly resolveValue: (value: string | null) => void,
 		title: string,
+		private readonly requiredMessage = 'A value is required',
+		private readonly placeholder = 'Required',
 	) {
 		super(app);
 		this.setTitle(title);
@@ -65,7 +67,7 @@ class TextPromptModal extends Modal {
 		this.input = this.contentEl.createEl('input', {
 			cls: 'para-inbox-review-modal-input',
 			type: 'text',
-			placeholder: 'Required',
+			placeholder: this.placeholder,
 		});
 		this.input.addEventListener('keydown', (event) => {
 			if (event.key === 'Enter') this.submit();
@@ -86,7 +88,7 @@ class TextPromptModal extends Modal {
 	private submit(): void {
 		const value = this.input.value.trim();
 		if (value.length === 0) {
-			new Notice('Archive reason is required');
+			new Notice(this.requiredMessage);
 			return;
 		}
 		this.settled = true;
@@ -239,6 +241,28 @@ export function createObsidianActionInput(app: App): ParaActionInputPort {
 export function confirmTrash(app: App, path: string): Promise<boolean> {
 	return new Promise((resolve) =>
 		new ConfirmationModal(app, `Move ${path} to your configured Obsidian trash?`, resolve).open(),
+	);
+}
+
+export function chooseProjectArchiveStatus(
+	app: App,
+	statuses: readonly string[],
+): Promise<string | null> {
+	return choose(app, statuses, 'Project status after archiving');
+}
+
+export function requestExpirationDate(
+	app: App,
+	property: 'deadline' | 'expired_at',
+): Promise<string | null> {
+	return new Promise((resolve) =>
+		new TextPromptModal(
+			app,
+			resolve,
+			`New ${property}`,
+			'A valid date is required',
+			'YYYY-MM-DD',
+		).open(),
 	);
 }
 

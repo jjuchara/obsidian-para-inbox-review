@@ -1,8 +1,16 @@
 # Decisions
 
-## 2026-07-24 — Keep the plugin limited to Inbox review
+## 2026-07-28 — Expand from Inbox-only to two explicit review workflows
 
-- Status: accepted.
+- Status: accepted and implemented; this supersedes only the Inbox-only scope decision below.
+- The stable plugin id remains `para-inbox-review`, while the display name becomes `PARA Review` before Community Plugins submission.
+- Projects use strict `deadline`; every other non-archive Markdown note opts in with `expired_at`. A past date only creates a review candidate and never mutates in the background.
+- Inbox and expired-note controllers/views are independent. Users may reschedule, archive, confirm trash, skip, pause, or close.
+- Expired Project archive requires a status from configurable defaults `Завершено` and `Отменено`; the replacement participates in the same source-revalidated, move-last rollback plan.
+
+## 2026-07-24 — Keep the initial plugin limited to Inbox review
+
+- Status: historical initial boundary; superseded on 2026-07-28 by the explicit expired-note workflow.
 - The repository implements only the compatible FIFO Inbox review workflow.
 - Capture, Home, general search, multi-note merge, and Daily notes remain in their existing owners or future project phases.
 

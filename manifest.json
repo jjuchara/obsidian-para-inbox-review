@@ -1,9 +1,9 @@
 {
 	"id": "para-inbox-review",
-	"name": "PARA Inbox Review",
-	"version": "0.1.0",
+	"name": "PARA Review",
+	"version": "0.2.0",
 	"minAppVersion": "1.12.0",
-	"description": "Review an Inbox as a predictable FIFO queue and sort notes into PARA.",
+	"description": "Review an Inbox and explicitly process notes whose review date has expired.",
 	"author": "jjuchara",
 	"authorUrl": "https://github.com/jjuchara",
 	"isDesktopOnly": false

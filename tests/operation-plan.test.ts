@@ -210,3 +210,23 @@ void test('restores present empty values instead of deleting them during rollbac
 		{ action: 'set', name: 'created', value: '', type: 'datetime' },
 	]);
 });
+
+void test('replaces project status as part of the archive transaction', () => {
+	const plan = buildParaOperationPlan({
+		path: '1. Projects/Done.md',
+		destination: '4. Archives/Projects/Done.md',
+		category: 'archives',
+		existing: { created: 'old', status: 'В работе' },
+		context: {
+			archived: '2026-07-28',
+			archiveReason: 'Complete',
+			replacements: { status: { value: 'Завершено', type: 'text' } },
+		},
+		config: CONFIG,
+	});
+	assert.equal(plan.metadata.status, 'Завершено');
+	assert.deepEqual(plan.apply.at(-1), { name: 'status', value: 'Завершено', type: 'text' });
+	assert.deepEqual(plan.compensate[0], {
+		action: 'set', name: 'status', value: 'В работе', type: 'text',
+	});
+});

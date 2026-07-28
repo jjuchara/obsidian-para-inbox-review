@@ -98,7 +98,7 @@ export function createObsidianMutationPort<File extends VaultFileLike>(
 			const content = await vault.read(file);
 			const after = snapshot(file);
 			if (!sameSnapshot(before, after)) {
-				throw new Error(`Inbox note changed during inspection: ${file.path}`);
+				throw new Error(`Review note changed during inspection: ${file.path}`);
 			}
 			return {
 				file: after,

@@ -16,6 +16,7 @@ const SETTINGS = {
 	areasLink: '[[My Areas]]',
 	resourcesFolder: '3. Resources',
 	archivesFolder: '4. Archives',
+	projectArchiveStatuses: ['Завершено', 'Отменено'],
 };
 
 const ITEM = {

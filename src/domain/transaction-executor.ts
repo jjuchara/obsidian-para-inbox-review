@@ -114,7 +114,7 @@ export async function executeParaOperation(options: {
 			ok: false,
 			kind: 'preflight',
 			reason: 'source_changed',
-			message: `Inbox note changed after review started: ${plan.move.path}`,
+			message: `Review note changed after review started: ${plan.move.path}`,
 		};
 	}
 

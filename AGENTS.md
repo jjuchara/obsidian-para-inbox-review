@@ -4,12 +4,12 @@
 
 - **The single source of truth is always the documentation project in Obsidian** (the Russian second-brain): [Плагин для PARA Обсидиан](</Users/jjuchara/Library/Mobile Documents/iCloud~md~obsidian/Documents/obsidian_jjuchara/1. Projects/obsidian para flow/Плагин для PARA Обсидиан.md>). Open it in Obsidian with [Плагин для PARA Обсидиан](obsidian://open?vault=obsidian_jjuchara&file=1.%20Projects%2Fobsidian%20para%20flow%2F%D0%9F%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD%20%D0%B4%D0%BB%D1%8F%20PARA%20%D0%9E%D0%B1%D1%81%D0%B8%D0%B4%D0%B8%D0%B0%D0%BD). All product thinking, planning, ideas, decisions, design, manual-testing evidence, and roadmap live and are maintained there.
 - **This git repository stores only the code-adjacent English contracts required to use, maintain, verify, and release this plugin** — README, CHANGELOG, ARCHITECTURE, CONTRIBUTING, DECISIONS, LICENSE, and RELEASE_CHECKLIST. Do not create English mirrors of the second brain here.
-- **Read `Плагин для PARA Обсидиан.md`, `DESKTOP_INBOX_REVIEW.md`, and the relevant files under `1. Projects/obsidian para flow/` before planning substantial work.**
+- **Read `Плагин для PARA Обсидиан.md`, `DESKTOP_INBOX_REVIEW.md`, `ARCHIVE_REVIEW_DESIGN.md`, and the relevant files under `1. Projects/obsidian para flow/` before planning substantial work.**
 - After meaningful code or behavior changes, update the affected Russian documents in the Obsidian source of truth and refresh the repository's release-facing English files when the change is user-visible.
 
 ## Current state
 
-This repository contains the implemented `PARA Inbox Review` Obsidian community plugin. The automated Inbox workflow covers native-editor save, PARA input collection, transactional sorting, confirmed trash, and halted recovery rendering. Automated tests and the first complete disposable-vault manual gate on Obsidian 1.12.7 pass; publication remains pending. Scope is limited to compatible Inbox review; Capture, Home, general search, multi-note merge, and Daily notes remain outside this repository.
+This repository contains the published `PARA Review` Obsidian community plugin at `0.2.0` with stable id `para-inbox-review`. It combines the manually verified Inbox workflow with an independent expired-note review using `deadline` for Projects and opt-in `expired_at` elsewhere. Capture, Home, general search, multi-note merge, and Daily notes remain outside this repository. The owner explicitly authorized `0.2.0` before the new workflow's disposable-vault evidence and will validate it in normal use; the evidence remains open.
 
 The plugin uses TypeScript, the official Obsidian API, npm, esbuild, and ESLint. Use `npm run check` before claiming changes are complete. Do not develop against the production vault; use a dedicated test vault.
 

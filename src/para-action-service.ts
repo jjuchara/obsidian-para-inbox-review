@@ -69,6 +69,7 @@ export class ParaActionService {
 	async execute(
 		item: InboxQueueItem,
 		category: ParaCategory,
+		replacements?: MetadataContext['replacements'],
 	): Promise<ParaActionResult> {
 		await this.input.saveSource(item.path);
 		const inspection = await this.mutation.inspectSource(item.path);
@@ -82,6 +83,7 @@ export class ParaActionService {
 		const context: MetadataContext = {
 			created: formatLocalDateTime(new Date(item.ctime)),
 			archived: formatLocalDate(this.now()),
+			replacements,
 		};
 		if (
 			(category === 'projects' || category === 'resources') &&

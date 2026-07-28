@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.0 - 2026-07-28
+
+- Expanded the display name to `PARA Review` while preserving the stable plugin id `para-inbox-review`.
+- Added an independent expired-note review queue and native view/ribbon action. Projects use strict
+  `deadline`; other non-archive Markdown notes opt in with `expired_at`.
+- Added rescheduling to today or later, confirmed trash, skip/pause/close, explicit archive folder
+  and reason collection, and configurable project status choice before archive.
+- Included project status replacement in the existing source-revalidated, move-last rollback
+  transaction and expanded the automated gate from 58 to 62 tests.
+- The owner explicitly authorized release before the new disposable-vault manual gate and will
+  validate the workflow in normal use; the open evidence is not represented as completed.
+
 ## 0.1.0 - 2026-07-27
 
 - Initialized the Obsidian community plugin development repository from the official sample template.

@@ -1,14 +1,14 @@
-# PARA Inbox Review
+# PARA Review
 
-An Obsidian community plugin for reviewing an Inbox as a predictable FIFO queue and sorting notes into Projects, Areas, Resources, or Archives.
+An Obsidian community plugin with independent Inbox and expired-note review workflows.
 
 ## Status
 
-The Inbox review workflow is implemented and covered by 58 automated tests, including native-editor save, PARA input collection, transactional sorting, revalidated trash, safe close choices, assignable commands, and halted recovery output. The complete workflow and the 2026-07-27 safety hardening passed focused manual gates on Obsidian 1.12.7; the owner also confirmed the ribbon/view icon, modal spacing, and assigned-hotkey flows in the production profile after explicitly installing the release candidate. [Version 0.1.0](https://github.com/jjuchara/obsidian-para-inbox-review/releases/tag/0.1.0) is published; submission to the Obsidian Community Directory is pending owner authentication.
+Release `0.2.0` adds expired-note review and is covered by a 62-test automated gate. The owner explicitly authorized publication before its disposable-vault manual gate and will validate it in normal use; that evidence remains open. Submission to the Obsidian Community Directory is pending owner authentication.
 
 ## Scope
 
-The plugin will provide only the desktop Inbox review workflow shared with `nvim-obsidian-para-flow`:
+The plugin provides two user-started review workflows shared with `nvim-obsidian-para-flow`:
 
 - open the oldest Inbox note first;
 - edit the note in Obsidian's native Markdown editor;
@@ -16,8 +16,11 @@ The plugin will provide only the desktop Inbox review workflow shared with `nvim
 - skip a note for the current pass, pause review, or move it to the configured Obsidian trash after confirmation;
 - preflight all required input and destination conflicts before mutation;
 - stop with an exact recovery report if a multi-step mutation cannot be fully rolled back.
+- review Projects whose strict `deadline: YYYY-MM-DD` has passed and other non-archive Markdown notes that opt in with `expired_at`;
+- reschedule a candidate, archive it, confirm trash, or skip it without background mutation;
+- require a configurable new project status before an expired Project is archived.
 
-Capture, Home, general search, multi-note merge, and Daily notes are outside this plugin.
+Capture, Home, general search, multi-note merge, and Daily notes remain outside this plugin.
 
 ## Implemented foundation
 
@@ -36,7 +39,8 @@ Capture, Home, general search, multi-note merge, and Daily notes are outside thi
 - confirmed movement to the user's configured Obsidian trash only after a second source snapshot matches the pre-confirmation baseline; permanent deletion is not exposed.
 - pause returns to the native editor, while close offers save, discard, and safe cancel when the current editor has unsaved changes.
 - plugin-scoped modal action rows with theme spacing, wrapping, and native Obsidian buttons.
-- nine Obsidian commands that users can bind in Settings → Hotkeys; action commands are disabled unless an idle active item exists, the plugin defines no default hotkeys, and the review controls keep the assignment location visible.
+- nine Inbox-review commands that users can bind in Settings → Hotkeys; action commands are disabled unless an idle active item exists, the plugin defines no default hotkeys, and the review controls keep the assignment location visible.
+- an independent expired-note queue, `archive-restore` ribbon/view, six current-item/session commands plus its opening command, strict local-date parsing, visible invalid-metadata diagnostics, and Archives exclusion.
 
 ## Commands
 
@@ -50,13 +54,23 @@ Capture, Home, general search, multi-note merge, and Daily notes are outside thi
 - `Move current note to trash`
 - `Close inbox review`
 
-Assign any of these commands in Obsidian's Settings → Hotkeys. Only `Open inbox review` is available without an active review item; no command has a default hotkey.
+Expired-note commands:
+
+- `Open expired-note review`
+- `Change current expiration date`
+- `Archive current expired note`
+- `Move current expired note to trash`
+- `Skip current expired note`
+- `Pause expired-note review`
+- `Close expired-note review`
+
+Assign commands in Obsidian's Settings → Hotkeys. The two opening commands are always available; current-item commands require an idle item in their own session. No command has a default hotkey.
 
 Before a PARA action, the plugin saves the current native Markdown view, reads a fresh source snapshot, collects every required input, and then revalidates the source immediately before the first mutation. Trash follows the same safety shape: save, inspect, confirm, inspect again, and delete only if both inspections match. Canceling a selector or prompt leaves the note and session unchanged.
 
 ## Settings
 
-The plugin stores explicit vault-relative roots for Inbox, Projects, Areas, Resources, and Archives. Projects and Areas also have explicit index wikilinks used only when a sorted note is missing its `links` property. Settings are persisted through Obsidian's plugin data API; paths are not guessed from the active file.
+The plugin stores explicit vault-relative roots for Inbox, Projects, Areas, Resources, and Archives. Projects and Areas also have explicit index wikilinks used only when a sorted note is missing its `links` property. `Project archive statuses` is a comma-separated non-empty list with defaults `Завершено, Отменено`. Settings are persisted through Obsidian's plugin data API; paths and archive destinations are not guessed.
 
 ## Development
 
@@ -76,9 +90,10 @@ Product design, roadmap, decisions, and manual evidence are maintained in Russia
 
 - `1. Projects/obsidian para flow/Плагин для PARA Обсидиан.md`
 - `1. Projects/obsidian para flow/DESKTOP_INBOX_REVIEW.md`
+- `1. Projects/obsidian para flow/ARCHIVE_REVIEW_DESIGN.md`
 
 This repository contains only code-adjacent English contracts needed to develop, verify, and release the plugin.
 
 ## Privacy
 
-The planned plugin is local-only. It must not transmit vault content, filenames, metadata, or usage information and must not include telemetry.
+The plugin is local-only. It does not transmit vault content, filenames, metadata, or usage information and includes no telemetry.

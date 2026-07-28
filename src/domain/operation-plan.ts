@@ -14,6 +14,10 @@ export interface MetadataContext {
 	archived?: string;
 	area?: string;
 	archiveReason?: string;
+	replacements?: Readonly<Record<string, {
+		value: unknown;
+		type: PropertyType;
+	}>>;
 }
 
 export interface ParaMetadataConfig {
@@ -101,6 +105,18 @@ function addMissing(
 	additions.push({ name, value: clone(value), type });
 }
 
+function replaceValue(
+	metadata: MetadataRecord,
+	additions: PropertyAddition[],
+	name: string,
+	value: unknown,
+	type: PropertyType,
+): void {
+	if (!hasValue(value) || Object.is(metadata[name], value)) return;
+	metadata[name] = clone(value);
+	additions.push({ name, value: clone(value), type });
+}
+
 export function normalizeParaMetadata(
 	category: ParaCategory,
 	existing: Readonly<MetadataRecord>,
@@ -168,6 +184,9 @@ export function normalizeParaMetadata(
 	if (!hasValue(metadata.created)) missing.push('created');
 	if (category === 'archives' && !hasValue(metadata.archived)) {
 		missing.push('archived');
+	}
+	for (const [name, replacement] of Object.entries(context.replacements ?? {})) {
+		replaceValue(metadata, additions, name, replacement.value, replacement.type);
 	}
 
 	return { metadata, additions, missing };

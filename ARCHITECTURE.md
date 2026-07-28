@@ -2,7 +2,7 @@
 
 ## Boundary
 
-`PARA Inbox Review` is an Obsidian UI adapter for the established Inbox review contract. It does not own capture, Home, search, merge, or Daily workflows.
+`PARA Review` is an Obsidian UI adapter for independent Inbox and expired-note review contracts. It does not own capture, Home, search, merge, or Daily workflows. The stable plugin id remains `para-inbox-review`.
 
 ## Runtime model
 
@@ -16,12 +16,14 @@
 - A tested review controller owns the current session independently from the view, serializes asynchronous navigation, and commits a skip only after the next note opens successfully. The plugin lifecycle registers nine commands, the ribbon action, and `ItemView`; the current note opens in a normal workspace leaf.
 - The opening command is always available. The eight current-item commands use `checkCallback()` and are exposed to Obsidian's Hotkeys settings only while an idle active item exists; no default hotkeys are registered, and the review view keeps a compact Settings → Hotkeys hint visible.
 - Pause commits a terminal session and detaches the review leaf, leaving the current native editor in place. Close compares the editor contents with its saved data and, when necessary, requires an explicit save, discard, or cancel choice before closing the session.
+- Expired-note review has a separate controller and `ItemView`. Its loader inspects vault-visible Markdown files outside Archives, uses `deadline` for the configured Projects root and opt-in `expired_at` elsewhere, rejects non-strict dates, and sorts overdue candidates oldest first.
+- Rescheduling revalidates the source around the date prompt and writes one typed date property. Project archival collects a configured status before the existing folder/reason flow and passes status as an explicit replacement with reverse compensation.
 
 ## Official API boundary
 
 - Read vault-visible files through `Vault` and display content through native Obsidian views.
 - Resolve configured paths with `normalizePath()` and typed `TFile`/`TFolder` checks.
-- Add only missing metadata with `FileManager.processFrontMatter()`.
+- Add only missing metadata with `FileManager.processFrontMatter()`, except for a user-confirmed expiration reschedule or Project status replacement during archival.
 - Move notes with `FileManager.renameFile()` so Obsidian applies its link-update behavior.
 - Confirm deletion and use `FileManager.trashFile()` so the user's trash preference is respected.
 - Register commands, views, and events through `Plugin` lifecycle helpers.
@@ -39,7 +41,7 @@ A PARA action is a multi-step operation, not an atomic Obsidian API transaction.
 5. compensate completed metadata changes in reverse order if the move fails;
 6. halt the session with an exact recovery report if compensation is incomplete.
 
-Existing metadata and note body content remain unchanged unless the user edits the note in the native editor.
+Existing metadata and note body content remain unchanged unless the user edits the note in the native editor or explicitly chooses a documented replacement action.
 
 The pure planner is implemented independently from Obsidian APIs. It produces a preflight report, complete metadata snapshot, ordered property additions, a move-last step, and reverse compensation steps. Missing `area`, `archive_reason`, `created`, or `archived` values remain visible in preflight and prevent a future executor from starting.
 

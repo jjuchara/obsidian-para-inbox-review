@@ -2,6 +2,10 @@
 
 ## Before release
 
+- [x] The current automated `npm run check` gate passes 62 tests for Inbox plus expired-note domain behavior. ✅ 2026-07-28
+- [ ] Expired-note review passes a disposable-vault manual gate for strict date selection, invalid metadata, reschedule, both default project statuses, archive conflict/rollback, trash cancel/success, skip/pause/close, and independent Inbox state.
+- [x] The owner explicitly authorized `0.2.0` publication before that manual gate and chose normal-use validation; the unchecked evidence above remains open. ✅ 2026-07-28
+
 - [x] Canonical Russian documentation and affected English code-adjacent contracts are synchronized. ✅ 2026-07-27
 - [x] `npm run check` passes (58 tests). ✅ 2026-07-27
 - [x] `git diff --check` passes after the complete code and documentation diff. ✅ 2026-07-27

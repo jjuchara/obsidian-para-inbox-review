@@ -9,6 +9,7 @@ export interface ParaInboxReviewSettings {
 	areasLink: string;
 	resourcesFolder: string;
 	archivesFolder: string;
+	projectArchiveStatuses: string[];
 }
 
 export const DEFAULT_SETTINGS: ParaInboxReviewSettings = {
@@ -19,9 +20,10 @@ export const DEFAULT_SETTINGS: ParaInboxReviewSettings = {
 	areasLink: '[[My Areas]]',
 	resourcesFolder: '3. Resources',
 	archivesFolder: '4. Archives',
+	projectArchiveStatuses: ['Завершено', 'Отменено'],
 };
 
-type FolderSettingKey = keyof ParaInboxReviewSettings;
+type FolderSettingKey = Exclude<keyof ParaInboxReviewSettings, 'projectArchiveStatuses'>;
 
 const FOLDER_SETTINGS: ReadonlyArray<{
 	key: FolderSettingKey;
@@ -59,5 +61,20 @@ export class ParaInboxReviewSettingTab extends PluginSettingTab {
 						}),
 				);
 		}
+
+		new Setting(this.containerEl)
+			.setName('Project archive statuses')
+			.setDesc('Comma-separated statuses offered before an expired project is archived.')
+			.addText((text) =>
+				text
+					.setPlaceholder('Завершено, Отменено')
+					.setValue(this.plugin.settings.projectArchiveStatuses.join(', '))
+					.onChange(async (value) => {
+						const statuses = value.split(',').map((status) => status.trim()).filter(Boolean);
+						if (statuses.length === 0) return;
+						this.plugin.settings.projectArchiveStatuses = statuses;
+						await this.plugin.saveSettings();
+					}),
+			);
 	}
 }
