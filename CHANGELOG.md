@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 
 - Accepted strict `DD.MM.YYYY` expiration dates used by the existing vault alongside ISO
   `YYYY-MM-DD`; rescheduling accepts either form and writes canonical ISO.
+- Published tag and GitHub Release `0.2.1` from commit
+  `3dd880ba27c644bc5bf080c403c9379e7acba5a6` after green CI run `30378684381`; release build
+  `30378802519` produced `main.js`, `manifest.json`, and `styles.css` matching local SHA-256 values.
 
 ## 0.2.0 - 2026-07-28
 
