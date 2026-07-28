@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file.
   transaction and expanded the automated gate from 58 to 62 tests.
 - The owner explicitly authorized release before the new disposable-vault manual gate and will
   validate the workflow in normal use; the open evidence is not represented as completed.
+- Published tag and GitHub Release `0.2.0` from commit
+  `33e6d9dffb5140dc846f6b5ca7349486e0f26c59` after green CI run `30375095730`; release build
+  `30375225029` produced `main.js`, `manifest.json`, and `styles.css` matching local SHA-256 values.
 
 ## 0.1.0 - 2026-07-27
 

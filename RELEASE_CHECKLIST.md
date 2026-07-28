@@ -18,6 +18,9 @@
 
 ## Publication
 
+- [x] Tag `0.2.0` resolves to commit `33e6d9dffb5140dc846f6b5ca7349486e0f26c59`; CI run `30375095730` and release build `30375225029` are green. ✅ 2026-07-28
+- [x] Release `0.2.0` is published with `main.js`, `manifest.json`, and `styles.css`; downloaded assets match the local SHA-256 checksums. ✅ 2026-07-28
+
 - [x] The release tag exactly matches the manifest version and has no leading `v`; `0.1.0` resolves to commit `70be0386c5a2d129d36d5a8b0044c38f4ab0c052`. ✅ 2026-07-27
 - [x] The GitHub release includes `main.js`, `manifest.json`, and `styles.css`; downloaded assets match the local SHA-256 checksums. ✅ 2026-07-27
 - [x] The release notes describe shipped behavior rather than planned behavior. ✅ 2026-07-27
