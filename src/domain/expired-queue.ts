@@ -26,17 +26,27 @@ function inside(path: string, folder: string): boolean {
 	return path === root || path.startsWith(`${root}/`);
 }
 
-export function parseLocalDate(value: unknown): number | null {
+export function normalizeLocalDate(value: unknown): string | null {
 	if (typeof value !== 'string') return null;
-	const match = /^(\d{4})-(\d{2})-(\d{2})$/u.exec(value.trim());
-	if (!match) return null;
-	const year = Number(match[1]);
-	const month = Number(match[2]);
-	const day = Number(match[3]);
+	const trimmed = value.trim();
+	const iso = /^(\d{4})-(\d{2})-(\d{2})$/u.exec(trimmed);
+	const localized = /^(\d{2})\.(\d{2})\.(\d{4})$/u.exec(trimmed);
+	if (!iso && !localized) return null;
+	const year = Number(iso?.[1] ?? localized?.[3]);
+	const month = Number(iso?.[2] ?? localized?.[2]);
+	const day = Number(iso?.[3] ?? localized?.[1]);
 	const date = new Date(year, month - 1, day);
-	return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day
-		? date.getTime()
-		: null;
+	if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+		return null;
+	}
+	return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+}
+
+export function parseLocalDate(value: unknown): number | null {
+	const normalized = normalizeLocalDate(value);
+	if (normalized === null) return null;
+	const [year, month, day] = normalized.split('-').map(Number);
+	return new Date(year ?? 0, (month ?? 1) - 1, day ?? 1).getTime();
 }
 
 export function localDayStart(now: Date): number {

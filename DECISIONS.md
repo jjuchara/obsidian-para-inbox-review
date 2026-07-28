@@ -4,7 +4,7 @@
 
 - Status: accepted and implemented; this supersedes only the Inbox-only scope decision below.
 - The stable plugin id remains `para-inbox-review`, while the display name becomes `PARA Review` before Community Plugins submission.
-- Projects use strict `deadline`; every other non-archive Markdown note opts in with `expired_at`. A past date only creates a review candidate and never mutates in the background.
+- Projects use `deadline`; every other non-archive Markdown note opts in with `expired_at`. Strict ISO and existing-vault `DD.MM.YYYY` calendar dates are accepted, while rescheduling writes ISO. A past date only creates a review candidate and never mutates in the background.
 - Inbox and expired-note controllers/views are independent. Users may reschedule, archive, confirm trash, skip, pause, or close.
 - Expired Project archive requires a status from configurable defaults `Завершено` and `Отменено`; the replacement participates in the same source-revalidated, move-last rollback plan.
 

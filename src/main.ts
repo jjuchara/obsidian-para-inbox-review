@@ -40,7 +40,7 @@ import {
 	type ReviewCommandAction,
 } from './review-commands';
 import type { ExpiredQueueItem } from './domain/expired-queue';
-import { localDayStart, parseLocalDate } from './domain/expired-queue';
+import { localDayStart, normalizeLocalDate, parseLocalDate } from './domain/expired-queue';
 import { sourceInspectionsEqual } from './source-snapshot';
 import {
 	EXPIRED_REVIEW_COMMANDS,
@@ -140,9 +140,10 @@ export default class ParaInboxReviewPlugin extends Plugin {
 				const before = await this.mutation.inspectSource(item.path);
 				const value = await requestExpirationDate(this.app, item.expirationProperty);
 				if (value === null) return { transition: 'stay' as const, result: false };
-				const timestamp = parseLocalDate(value);
+				const normalized = normalizeLocalDate(value);
+				const timestamp = parseLocalDate(normalized);
 				if (timestamp === null || timestamp < localDayStart(new Date())) {
-					new Notice('Expiration date must use year-month-day format and be today or later.');
+					new Notice('Expiration date must use YYYY-MM-DD or DD.MM.YYYY and be today or later.');
 					return { transition: 'stay' as const, result: false };
 				}
 				const after = await this.mutation.inspectSource(item.path);
@@ -152,7 +153,7 @@ export default class ParaInboxReviewPlugin extends Plugin {
 				}
 				await this.mutation.setProperty(item.path, {
 					name: item.expirationProperty,
-					value,
+					value: normalized,
 					type: 'date',
 				});
 				return { transition: 'complete' as const, result: true };

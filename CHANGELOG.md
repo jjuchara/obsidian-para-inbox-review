@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.1 - 2026-07-28
+
+- Accepted strict `DD.MM.YYYY` expiration dates used by the existing vault alongside ISO
+  `YYYY-MM-DD`; rescheduling accepts either form and writes canonical ISO.
+
 ## 0.2.0 - 2026-07-28
 
 - Expanded the display name to `PARA Review` while preserving the stable plugin id `para-inbox-review`.

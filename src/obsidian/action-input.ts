@@ -261,7 +261,7 @@ export function requestExpirationDate(
 			resolve,
 			`New ${property}`,
 			'A valid date is required',
-			'YYYY-MM-DD',
+			'YYYY-MM-DD or DD.MM.YYYY',
 		).open(),
 	);
 }

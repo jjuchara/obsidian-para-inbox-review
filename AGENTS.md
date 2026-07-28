@@ -9,7 +9,7 @@
 
 ## Current state
 
-This repository contains the published `PARA Review` Obsidian community plugin at `0.2.0` with stable id `para-inbox-review`. It combines the manually verified Inbox workflow with an independent expired-note review using `deadline` for Projects and opt-in `expired_at` elsewhere. Capture, Home, general search, multi-note merge, and Daily notes remain outside this repository. The owner explicitly authorized `0.2.0` before the new workflow's disposable-vault evidence and will validate it in normal use; the evidence remains open.
+This repository contains the published `PARA Review` Obsidian community plugin at `0.2.1` with stable id `para-inbox-review`. It combines the manually verified Inbox workflow with an independent expired-note review using `deadline` for Projects and opt-in `expired_at` elsewhere. Capture, Home, general search, multi-note merge, and Daily notes remain outside this repository. The owner explicitly authorized the expired-note release line before the new workflow's disposable-vault evidence and will validate it in normal use; the evidence remains open.
 
 The plugin uses TypeScript, the official Obsidian API, npm, esbuild, and ESLint. Use `npm run check` before claiming changes are complete. Do not develop against the production vault; use a dedicated test vault.
 
