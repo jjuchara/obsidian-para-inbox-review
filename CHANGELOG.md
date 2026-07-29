@@ -14,6 +14,10 @@ All notable changes to this project will be documented in this file.
   without issues, including discovery and invalid metadata, calendar/manual rescheduling,
   project status and archive branches, rollback, trash, and independent session behavior. The
   exact Obsidian version and UI provider were not separately reported.
+- Published tag and GitHub Release `0.3.0` from commit
+  `ef1a3cbde85527f66ceac160900b85e8a88f173e`; main CI `30426391265` and release build
+  `30426391151` are green, and downloaded `main.js`, `manifest.json`, and `styles.css` match the
+  local production build by SHA-256.
 
 ## 0.2.1 - 2026-07-28
 

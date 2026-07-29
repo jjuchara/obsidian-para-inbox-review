@@ -21,14 +21,14 @@
 
 ## Publication
 
-- [ ] Tag `0.3.0` resolves to the release commit and tag/main CI are green.
-- [ ] Release `0.3.0` is published with `main.js`, `manifest.json`, and `styles.css`; downloaded asset SHA-256 values match the local production build.
+- [x] Annotated tag `0.3.0`, remote `main`, and the release tag resolve to commit `ef1a3cbde85527f66ceac160900b85e8a88f173e`; main CI `30426391265` and release build `30426391151` are green. ✅ 2026-07-29
+- [x] Release `0.3.0` is public, not draft or prerelease, with `main.js`, `manifest.json`, and `styles.css`; downloaded asset SHA-256 values match the local production build. ✅ 2026-07-29
 
 - [x] Tag `0.2.1` resolves to commit `3dd880ba27c644bc5bf080c403c9379e7acba5a6`; CI run
   `30378684381` and release build `30378802519` are green. ✅ 2026-07-28
 - [x] Release `0.2.1` is published with `main.js`, `manifest.json`, and `styles.css`; release asset
-  SHA-256 values match the local production build. The owner-authorized manual evidence remains
-  open. ✅ 2026-07-28
+  SHA-256 values match the local production build. The manual evidence was open at publication
+  and is now completed under the `0.3.0` evidence above. ✅ 2026-07-28
 
 - [x] Tag `0.2.0` resolves to commit `33e6d9dffb5140dc846f6b5ca7349486e0f26c59`; CI run `30375095730` and release build `30375225029` are green. ✅ 2026-07-28
 - [x] Release `0.2.0` is published with `main.js`, `manifest.json`, and `styles.css`; downloaded assets match the local SHA-256 checksums. ✅ 2026-07-28
