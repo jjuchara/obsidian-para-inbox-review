@@ -1,6 +1,6 @@
 {
 	"name": "para-inbox-review",
-	"version": "0.2.1",
+	"version": "0.3.0",
 	"description": "Obsidian plugin for FIFO Inbox review and explicit expired-note review",
 	"main": "main.js",
 	"type": "module",

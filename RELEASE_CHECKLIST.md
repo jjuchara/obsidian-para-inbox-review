@@ -2,9 +2,12 @@
 
 ## Before release
 
-- [x] The current automated `npm run check` gate passes 62 tests for Inbox plus expired-note domain behavior. ✅ 2026-07-28
-- [ ] Expired-note review passes a disposable-vault manual gate for both strict date formats, invalid metadata, ISO-normalized reschedule, both default project statuses, archive conflict/rollback, trash cancel/success, skip/pause/close, and independent Inbox state.
-- [x] The owner explicitly authorized `0.2.0` publication before that manual gate and chose normal-use validation; the unchecked evidence above remains open. ✅ 2026-07-28
+- [x] The current automated `npm run check` gate passes 64 tests for Inbox plus expired-note domain and calendar-input behavior. ✅ 2026-07-29
+- [x] Expired-note review passes the agreed disposable-vault manual gate for both strict date formats, invalid metadata, ISO-normalized reschedule, both default project statuses, archive conflict/rollback, trash cancel/success, skip/pause/close, and independent Inbox state. The owner reported no issues; the exact Obsidian version and UI provider were not separately reported. ✅ 2026-07-29
+- [x] The calendar-first modal opens on today, accepts a future date, blocks past calendar values, supports both strict manual formats, returns valid manual input to the calendar, cancels without mutation, and writes ISO. ✅ 2026-07-29
+- [x] Canonical Russian documentation and affected English code-adjacent contracts are synchronized for `0.3.0`. ✅ 2026-07-29
+- [x] `npm run check` passes 64 tests and `git diff --check` passes after the complete code and documentation diff. ✅ 2026-07-29
+- [x] The owner explicitly authorized `0.2.0` publication before the then-open manual gate; the completed evidence is recorded above. ✅ 2026-07-28
 
 - [x] Canonical Russian documentation and affected English code-adjacent contracts are synchronized. ✅ 2026-07-27
 - [x] `npm run check` passes (58 tests). ✅ 2026-07-27
@@ -17,6 +20,9 @@
 - [x] The production build contains no telemetry, network access, direct filesystem access, or undeclared dependencies. ✅ 2026-07-24
 
 ## Publication
+
+- [ ] Tag `0.3.0` resolves to the release commit and tag/main CI are green.
+- [ ] Release `0.3.0` is published with `main.js`, `manifest.json`, and `styles.css`; downloaded asset SHA-256 values match the local production build.
 
 - [x] Tag `0.2.1` resolves to commit `3dd880ba27c644bc5bf080c403c9379e7acba5a6`; CI run
   `30378684381` and release build `30378802519` are green. ✅ 2026-07-28

@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.0 - 2026-07-29
+
+- Replaced the expired-note reschedule text-only prompt with a native calendar initialized to the
+  local current day and constrained to today or later.
+- Kept strict `YYYY-MM-DD` and `DD.MM.YYYY` entry behind an explicit manual fallback, with safe
+  round-tripping back to the calendar and canonical ISO storage.
+- Added isolated coverage for local calendar defaults and manual-to-calendar normalization; the
+  automated gate now passes 64 tests.
+- The owner completed the agreed disposable-vault manual gate for both expired-note interfaces
+  without issues, including discovery and invalid metadata, calendar/manual rescheduling,
+  project status and archive branches, rollback, trash, and independent session behavior. The
+  exact Obsidian version and UI provider were not separately reported.
+
 ## 0.2.1 - 2026-07-28
 
 - Accepted strict `DD.MM.YYYY` expiration dates used by the existing vault alongside ISO

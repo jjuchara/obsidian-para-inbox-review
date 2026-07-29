@@ -35,6 +35,22 @@
 	width: 100%;
 }
 
+.para-inbox-review-date-field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-1, 4px);
+}
+
+.para-inbox-review-date-label,
+.para-inbox-review-date-hint {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+.para-inbox-review-date-hint {
+	margin: var(--size-4-1, 4px) 0 0;
+}
+
 .para-inbox-review-modal-actions {
 	display: flex;
 	flex-wrap: wrap;
@@ -46,4 +62,8 @@
 .para-inbox-review-modal-actions > button {
 	min-height: 32px;
 	margin: 0;
+}
+
+.para-inbox-review-modal-actions > .para-inbox-review-date-mode {
+	margin-right: auto;
 }

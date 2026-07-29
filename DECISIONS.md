@@ -1,5 +1,13 @@
 # Decisions
 
+## 2026-07-29 — Make the native calendar the default desktop reschedule input
+
+- Status: accepted, implemented, and manually verified by the owner in the agreed disposable-vault gate on 2026-07-29; the exact Obsidian version and UI provider were not separately reported.
+- The expired-note reschedule modal opens with a native `date` input initialized to the local current day and constrained to today or later.
+- The property name remains visible as field context while the modal title uses user-facing expiration-date language.
+- `Enter manually` preserves strict `YYYY-MM-DD` and `DD.MM.YYYY` input as an explicit fallback. Switching back to the calendar normalizes a valid manual value and refuses to discard invalid text silently.
+- Both modes keep the existing source-revalidation boundary and canonical ISO property write.
+
 ## 2026-07-28 — Expand from Inbox-only to two explicit review workflows
 
 - Status: accepted and implemented; this supersedes only the Inbox-only scope decision below.

@@ -4,7 +4,7 @@ An Obsidian community plugin with independent Inbox and expired-note review work
 
 ## Status
 
-Release `0.2.1` adds dual-format expiration-date support to expired-note review and is covered by a 62-test automated gate. The owner explicitly authorized publication before its disposable-vault manual gate and will validate it in normal use; that evidence remains open. Submission to the Obsidian Community Directory is pending owner authentication.
+Release `0.3.0` makes a native calendar the default expired-note reschedule input, keeps strict manual entry as an explicit fallback, and is covered by a 64-test automated gate. The owner completed the agreed disposable-vault manual gate for both expired-note interfaces without issues; the exact Obsidian version and UI provider were not separately reported. Submission to the Obsidian Community Directory is pending owner authentication.
 
 ## Scope
 
@@ -17,7 +17,7 @@ The plugin provides two user-started review workflows shared with `nvim-obsidian
 - preflight all required input and destination conflicts before mutation;
 - stop with an exact recovery report if a multi-step mutation cannot be fully rolled back.
 - review Projects whose `deadline` has passed and other non-archive Markdown notes that opt in with `expired_at`; strict `YYYY-MM-DD` and `DD.MM.YYYY` calendar dates are accepted, while rescheduling writes ISO;
-- reschedule a candidate, archive it, confirm trash, or skip it without background mutation;
+- reschedule a candidate through a native today-or-later calendar or explicit strict manual entry, archive it, confirm trash, or skip it without background mutation;
 - require a configurable new project status before an expired Project is archived.
 
 Capture, Home, general search, multi-note merge, and Daily notes remain outside this plugin.
@@ -40,7 +40,7 @@ Capture, Home, general search, multi-note merge, and Daily notes remain outside 
 - pause returns to the native editor, while close offers save, discard, and safe cancel when the current editor has unsaved changes.
 - plugin-scoped modal action rows with theme spacing, wrapping, and native Obsidian buttons.
 - nine Inbox-review commands that users can bind in Settings → Hotkeys; action commands are disabled unless an idle active item exists, the plugin defines no default hotkeys, and the review controls keep the assignment location visible.
-- an independent expired-note queue, `archive-restore` ribbon/view, six current-item/session commands plus its opening command, strict dual-format local-date parsing, visible invalid-metadata diagnostics, and Archives exclusion.
+- an independent expired-note queue, `archive-restore` ribbon/view, six current-item/session commands plus its opening command, a native calendar-first reschedule modal with manual dual-format fallback, visible invalid-metadata diagnostics, and Archives exclusion.
 
 ## Commands
 
