@@ -1,5 +1,13 @@
 # Decisions
 
+## 2026-07-31 — Set expired_at without advancing Inbox review
+
+- Status: accepted and implemented; focused disposable-vault evidence remains open.
+- Inbox review reuses the native calendar-first expiration modal, including strict manual `YYYY-MM-DD` / `DD.MM.YYYY`, today-or-later validation, and canonical ISO storage.
+- The action always targets date-only `expired_at`, appears as `Set expiration`, and is the ninth idle-item command; users may assign a hotkey, but the plugin defines no default.
+- Save, source inspection, selection, source reinspection, and one `processFrontMatter()` write form a shared action used by both Inbox assignment and expired-note rescheduling.
+- Success keeps the current FIFO item in place. Cancel, invalid input, and changed source evidence perform no mutation or queue transition.
+
 ## 2026-07-29 — Make the native calendar the default desktop reschedule input
 
 - Status: accepted, implemented, and manually verified by the owner in the agreed disposable-vault gate on 2026-07-29; the exact Obsidian version and UI provider were not separately reported.

@@ -11,6 +11,7 @@ void test('publishes the exact assignable review command surface', () => {
 			{ id: 'sort-current-areas', name: 'Sort current note into Areas' },
 			{ id: 'sort-current-resources', name: 'Sort current note into Resources' },
 			{ id: 'sort-current-archives', name: 'Sort current note into Archives' },
+			{ id: 'set-current-expiration-date', name: 'Set current note expiration date' },
 			{ id: 'skip-current-note', name: 'Skip current note' },
 			{ id: 'pause-inbox-review', name: 'Pause inbox review' },
 			{ id: 'trash-current-note', name: 'Move current note to trash' },

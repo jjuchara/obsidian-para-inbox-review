@@ -84,6 +84,9 @@ export class ParaInboxReviewView extends ItemView {
 			const reviewActions = actions.createDiv({
 				cls: 'para-inbox-review-action-row para-inbox-review-session-actions',
 			});
+			const expiration = reviewActions.createEl('button', { text: 'Set expiration' });
+			expiration.disabled = this.plugin.reviewController.isPending();
+			expiration.addEventListener('click', () => void this.plugin.setReviewExpirationDate());
 			const skip = reviewActions.createEl('button', { text: 'Skip' });
 			skip.disabled = this.plugin.reviewController.isPending();
 			skip.addEventListener('click', () => void this.plugin.skipReview());

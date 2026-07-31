@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.4.0 - 2026-07-31
+
+- Added `Set expiration` to Inbox review and a tenth user-assignable command for writing
+  `expired_at` through the existing calendar/manual UI without advancing the FIFO queue.
+- Shared save, source revalidation, today-or-later validation, and canonical ISO mutation between
+  Inbox assignment and expired-note rescheduling; the automated gate now passes 67 tests.
+- The project owner explicitly authorized the feature release while the focused disposable-vault
+  Inbox-expiration gate remains open; publication does not count as manual evidence.
+
 ## 0.3.0 - 2026-07-29
 
 - Replaced the expired-note reschedule text-only prompt with a native calendar initialized to the

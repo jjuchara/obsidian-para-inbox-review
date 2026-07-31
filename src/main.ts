@@ -34,14 +34,13 @@ import {
 	type ParaInboxReviewSettings,
 } from './settings';
 import { executeTrashAction } from './trash-action-service';
+import { setExpirationDate } from './expiration-date-action';
 import { currentInboxItem } from './domain/review-session';
 import {
 	REVIEW_COMMANDS,
 	type ReviewCommandAction,
 } from './review-commands';
 import type { ExpiredQueueItem } from './domain/expired-queue';
-import { localDayStart, normalizeLocalDate, parseLocalDate } from './domain/expired-queue';
-import { sourceInspectionsEqual } from './source-snapshot';
 import {
 	EXPIRED_REVIEW_COMMANDS,
 	type ExpiredReviewCommandAction,
@@ -136,27 +135,43 @@ export default class ParaInboxReviewPlugin extends Plugin {
 		try {
 			const result = await this.expiredReviewController.performCurrent(async (baseItem): Promise<ReviewActionDecision<boolean>> => {
 				const item = baseItem as ExpiredQueueItem;
-				await this.actionInput.saveSource(item.path);
-				const before = await this.mutation.inspectSource(item.path);
-				const value = await requestExpirationDate(this.app, item.expirationProperty);
-				if (value === null) return { transition: 'stay' as const, result: false };
-				const normalized = normalizeLocalDate(value);
-				const timestamp = parseLocalDate(normalized);
-				if (timestamp === null || timestamp < localDayStart(new Date())) {
-					new Notice('Expiration date must use YYYY-MM-DD or DD.MM.YYYY and be today or later.');
-					return { transition: 'stay' as const, result: false };
-				}
-				const after = await this.mutation.inspectSource(item.path);
-				if (!sourceInspectionsEqual(before, after)) {
-					new Notice('The note changed while the new expiration date was being selected.');
-					return { transition: 'stay' as const, result: false };
-				}
-				await this.mutation.setProperty(item.path, {
-					name: item.expirationProperty,
-					value: normalized,
-					type: 'date',
+				const action = await setExpirationDate({
+					path: item.path,
+					property: item.expirationProperty,
+					mutation: this.mutation,
+					saveSource: (path) => this.actionInput.saveSource(path),
+					requestDate: (property) => requestExpirationDate(this.app, property),
 				});
-				return { transition: 'complete' as const, result: true };
+				if (action.kind === 'invalid') {
+					new Notice('Expiration date must use YYYY-MM-DD or DD.MM.YYYY and be today or later.');
+				}
+				if (action.kind === 'source_changed') {
+					new Notice('The note changed while the new expiration date was being selected.');
+				}
+				const updated = action.kind === 'updated';
+				return { transition: updated ? 'complete' as const : 'stay' as const, result: updated };
+			});
+			if (result) new Notice('Expiration date updated.');
+		} catch (error) { new Notice(this.errorMessage(error)); }
+	}
+
+	async setReviewExpirationDate(): Promise<void> {
+		try {
+			const result = await this.reviewController.performCurrent(async (item): Promise<ReviewActionDecision<boolean>> => {
+				const action = await setExpirationDate({
+					path: item.path,
+					property: 'expired_at',
+					mutation: this.mutation,
+					saveSource: (path) => this.actionInput.saveSource(path),
+					requestDate: (property) => requestExpirationDate(this.app, property),
+				});
+				if (action.kind === 'invalid') {
+					new Notice('Expiration date must use YYYY-MM-DD or DD.MM.YYYY and be today or later.');
+				}
+				if (action.kind === 'source_changed') {
+					new Notice('The note changed while the expiration date was being selected.');
+				}
+				return { transition: 'stay', result: action.kind === 'updated' };
 			});
 			if (result) new Notice('Expiration date updated.');
 		} catch (error) { new Notice(this.errorMessage(error)); }
@@ -343,6 +358,7 @@ export default class ParaInboxReviewPlugin extends Plugin {
 		switch (action.kind) {
 			case 'open': void this.startReview(); break;
 			case 'sort': void this.sortReview(action.category); break;
+			case 'expiration': void this.setReviewExpirationDate(); break;
 			case 'skip': void this.skipReview(); break;
 			case 'pause': this.pauseReview(); break;
 			case 'trash': void this.trashReview(); break;

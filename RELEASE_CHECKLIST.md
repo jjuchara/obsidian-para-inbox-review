@@ -2,6 +2,18 @@
 
 ## Before release
 
+- [ ] In a disposable vault, set Inbox `expired_at` from the button and an assigned hotkey; verify
+  calendar/manual ISO storage without queue advancement, then cancel, past-date, and source-change
+  refusal without mutation.
+- [x] The current `npm run check` gate passes 67 tests including shared Inbox/expired-date action
+  success, cancel, invalid-date, and source-change coverage. ✅ 2026-07-31
+- [x] `package.json`, `package-lock.json`, `manifest.json`, and `versions.json` agree on `0.4.0` and
+  minimum Obsidian `1.12.0`. ✅ 2026-07-31
+- [x] Canonical Russian documentation and affected English code-adjacent contracts are synchronized
+  for the `0.4.0` release candidate. ✅ 2026-07-31
+- [x] The project owner explicitly authorized `0.4.0` publication while the focused disposable-
+  vault Inbox-expiration scenario remains open; this release does not mark it complete.
+
 - [x] The current automated `npm run check` gate passes 64 tests for Inbox plus expired-note domain and calendar-input behavior. ✅ 2026-07-29
 - [x] Expired-note review passes the agreed disposable-vault manual gate for both strict date formats, invalid metadata, ISO-normalized reschedule, both default project statuses, archive conflict/rollback, trash cancel/success, skip/pause/close, and independent Inbox state. The owner reported no issues; the exact Obsidian version and UI provider were not separately reported. ✅ 2026-07-29
 - [x] The calendar-first modal opens on today, accepts a future date, blocks past calendar values, supports both strict manual formats, returns valid manual input to the calendar, cancels without mutation, and writes ISO. ✅ 2026-07-29
@@ -20,6 +32,9 @@
 - [x] The production build contains no telemetry, network access, direct filesystem access, or undeclared dependencies. ✅ 2026-07-24
 
 ## Publication
+
+- [ ] Annotated tag `0.4.0`, remote `main`, CI, draft-to-published GitHub Release, and the three
+  release assets resolve to the release commit and pass checksum verification.
 
 - [x] Annotated tag `0.3.0`, remote `main`, and the release tag resolve to commit `ef1a3cbde85527f66ceac160900b85e8a88f173e`; main CI `30426391265` and release build `30426391151` are green. ✅ 2026-07-29
 - [x] Release `0.3.0` is public, not draft or prerelease, with `main.js`, `manifest.json`, and `styles.css`; downloaded asset SHA-256 values match the local production build. ✅ 2026-07-29

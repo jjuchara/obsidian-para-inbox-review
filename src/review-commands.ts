@@ -3,6 +3,7 @@ import type { ParaCategory } from './domain/operation-plan';
 export type ReviewCommandAction =
 	| { kind: 'open' }
 	| { kind: 'sort'; category: ParaCategory }
+	| { kind: 'expiration' }
 	| { kind: 'skip' }
 	| { kind: 'pause' }
 	| { kind: 'trash' }
@@ -35,6 +36,11 @@ export const REVIEW_COMMANDS: readonly ReviewCommandSpec[] = [
 		id: 'sort-current-archives',
 		name: 'Sort current note into Archives',
 		action: { kind: 'sort', category: 'archives' },
+	},
+	{
+		id: 'set-current-expiration-date',
+		name: 'Set current note expiration date',
+		action: { kind: 'expiration' },
 	},
 	{ id: 'skip-current-note', name: 'Skip current note', action: { kind: 'skip' } },
 	{ id: 'pause-inbox-review', name: 'Pause inbox review', action: { kind: 'pause' } },
