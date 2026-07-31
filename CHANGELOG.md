@@ -10,6 +10,10 @@ All notable changes to this project will be documented in this file.
   Inbox assignment and expired-note rescheduling; the automated gate now passes 67 tests.
 - The project owner explicitly authorized the feature release while the focused disposable-vault
   Inbox-expiration gate remains open; publication does not count as manual evidence.
+- Published annotated tag and public GitHub Release `0.4.0` from commit
+  `eca09f2286cf1fea4321e31680f8d8134f462400`; release/main CI runs `30661278632` and
+  `30661278790` are green, and downloaded `main.js`, `manifest.json`, and `styles.css` match the
+  local production build by SHA-256.
 
 ## 0.3.0 - 2026-07-29
 

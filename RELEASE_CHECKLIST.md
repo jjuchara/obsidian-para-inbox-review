@@ -33,8 +33,11 @@
 
 ## Publication
 
-- [ ] Annotated tag `0.4.0`, remote `main`, CI, draft-to-published GitHub Release, and the three
-  release assets resolve to the release commit and pass checksum verification.
+- [x] Annotated tag `0.4.0`, remote `main`, and the public, non-prerelease GitHub Release resolve to
+  commit `eca09f2286cf1fea4321e31680f8d8134f462400`; release/main CI runs `30661278632` and
+  `30661278790` are green. ✅ 2026-07-31
+- [x] Downloaded `main.js`, `manifest.json`, and `styles.css` match the local production build by
+  SHA-256. ✅ 2026-07-31
 
 - [x] Annotated tag `0.3.0`, remote `main`, and the release tag resolve to commit `ef1a3cbde85527f66ceac160900b85e8a88f173e`; main CI `30426391265` and release build `30426391151` are green. ✅ 2026-07-29
 - [x] Release `0.3.0` is public, not draft or prerelease, with `main.js`, `manifest.json`, and `styles.css`; downloaded asset SHA-256 values match the local production build. ✅ 2026-07-29
