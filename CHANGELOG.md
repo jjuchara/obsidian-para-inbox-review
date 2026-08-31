@@ -9,7 +9,10 @@ All notable changes to this project will be documented in this file.
 - Shared save, source revalidation, today-or-later validation, and canonical ISO mutation between
   Inbox assignment and expired-note rescheduling; the automated gate now passes 67 tests.
 - The project owner explicitly authorized the feature release while the focused disposable-vault
-  Inbox-expiration gate remains open; publication does not count as manual evidence.
+  Inbox-expiration gate remained open; publication did not count as manual evidence.
+- The focused disposable-vault Inbox-expiration gate was completed on 2026-08-31, covering the
+  calendar and manual paths, cancellation, past-date and source-change refusal, ISO storage, and
+  unchanged queue position.
 - Published annotated tag and public GitHub Release `0.4.0` from commit
   `eca09f2286cf1fea4321e31680f8d8134f462400`; release/main CI runs `30661278632` and
   `30661278790` are green, and downloaded `main.js`, `manifest.json`, and `styles.css` match the

@@ -4,7 +4,7 @@ An Obsidian community plugin with independent Inbox and expired-note review work
 
 ## Status
 
-Release `0.4.0` adds calendar-first `expired_at` assignment directly to Inbox review through a visible button and user-assignable command without advancing the FIFO item. The 67-test automated gate passes; the focused disposable-vault gate for this new action remains open and publication does not count as manual evidence. Submission to the Obsidian Community Directory is pending owner authentication.
+Release `0.4.0` adds calendar-first `expired_at` assignment directly to Inbox review through a visible button and user-assignable command without advancing the FIFO item. The 67-test automated gate and the focused disposable-vault gate for this action both pass; the latter was recorded on 2026-08-31. Submission to the Obsidian Community Directory is pending owner authentication.
 
 ## Scope
 
@@ -16,7 +16,7 @@ The plugin provides two user-started review workflows shared with `nvim-obsidian
 - skip a note for the current pass, pause review, or move it to the configured Obsidian trash after confirmation;
 - set the current Inbox note's `expired_at` through the shared calendar without advancing the queue;
 - preflight all required input and destination conflicts before mutation;
-- stop with an exact recovery report if a multi-step mutation cannot be fully rolled back.
+- stop with an exact recovery report if a multi-step mutation cannot be fully rolled back;
 - review Projects whose `deadline` has passed and other non-archive Markdown notes that opt in with `expired_at`; strict `YYYY-MM-DD` and `DD.MM.YYYY` calendar dates are accepted, while rescheduling writes ISO;
 - reschedule a candidate through a native today-or-later calendar or explicit strict manual entry, archive it, confirm trash, or skip it without background mutation;
 - require a configurable new project status before an expired Project is archived.

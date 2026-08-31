@@ -2,9 +2,9 @@
 
 ## Before release
 
-- [ ] In a disposable vault, set Inbox `expired_at` from the button and an assigned hotkey; verify
+- [x] In a disposable vault, set Inbox `expired_at` from the button and an assigned hotkey; verify
   calendar/manual ISO storage without queue advancement, then cancel, past-date, and source-change
-  refusal without mutation.
+  refusal without mutation. ✅ 2026-08-31
 - [x] The current `npm run check` gate passes 67 tests including shared Inbox/expired-date action
   success, cancel, invalid-date, and source-change coverage. ✅ 2026-07-31
 - [x] `package.json`, `package-lock.json`, `manifest.json`, and `versions.json` agree on `0.4.0` and
