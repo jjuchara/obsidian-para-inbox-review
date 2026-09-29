@@ -38,8 +38,8 @@
 
 ## Publication
 
-- [ ] Annotated tag `0.5.0` and remote `main` resolve to the release commit; release and main CI are green.
-- [ ] Publish the GitHub Release created by tag CI and confirm `main.js`, `manifest.json`, and `styles.css` match the local build by SHA-256.
+- [x] Annotated tag `0.5.0` and remote `main` resolve to release commit `05ffa4fe686f6b23d416936e73f365dc074edf89`; release and main CI `36557866063` / `36557866107` passed. ✅ 2026-09-29
+- [x] The GitHub Release is public and non-prerelease; downloaded `main.js`, `manifest.json`, and `styles.css` match the local build by SHA-256. ✅ 2026-09-29
 
 - [x] Annotated tag `0.4.0`, remote `main`, and the public, non-prerelease GitHub Release resolve to
   commit `eca09f2286cf1fea4321e31680f8d8134f462400`; release/main CI runs `30661278632` and

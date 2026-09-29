@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Added optional main-project selection when sorting Resources from Inbox. The full-path `project` wikilink is added only when empty, with an explicit no-project choice and safe cancellation, source revalidation, and rollback.
 - The canonical Projects template now lists linked notes from `3. Resources`. The owner authorized the feature release while disposable-vault UI and Dataview verification remains open.
+- Published annotated tag and public GitHub Release `0.5.0` from `05ffa4fe686f6b23d416936e73f365dc074edf89`. Release/main CI `36557866063` / `36557866107` passed, and all three downloaded assets matched the local build byte for byte. The manual gate remains open.
 
 ## 0.4.0 - 2026-07-31
 
