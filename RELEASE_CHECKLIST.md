@@ -44,7 +44,8 @@
 
 ## Publication
 
-- [ ] Confirm annotated tag `0.6.0` targets the release commit and remote `main`, then verify release CI and assets. The separate disposable-vault UI gate remains open until performed.
+- [x] Annotated tag `0.6.0` resolves to release commit `4d468ccb526cb4cbff9f93563fe4c25bbf05da59`, which was pushed to `main`; release/main CI `36578952526` / `36578951208` passed. ✅ 2026-09-29
+- [ ] The workflow creates a draft GitHub Release; verify and publish its assets when appropriate. The separate disposable-vault UI gate remains open until performed.
 - [x] Annotated tag `0.5.0` and remote `main` resolve to release commit `05ffa4fe686f6b23d416936e73f365dc074edf89`; release and main CI `36557866063` / `36557866107` passed. ✅ 2026-09-29
 - [x] The GitHub Release is public and non-prerelease; downloaded `main.js`, `manifest.json`, and `styles.css` match the local build by SHA-256. ✅ 2026-09-29
 
