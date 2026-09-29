@@ -4,7 +4,7 @@ An Obsidian community plugin with independent Inbox and expired-note review work
 
 ## Status
 
-Release `0.4.0` adds calendar-first `expired_at` assignment directly to Inbox review through a visible button and user-assignable command without advancing the FIFO item. The 67-test automated gate and the focused disposable-vault gate for this action both pass; the latter was recorded on 2026-08-31. Submission to the Obsidian Community Directory is pending owner authentication.
+Version `0.5.0` adds an optional main-project link when sorting Resources from Inbox, and the canonical Projects template lists linked resources. The 75-test automated gate passes. The owner authorized release while the focused disposable-vault selector and Dataview check remains open. Submission to the Obsidian Community Directory is pending owner authentication.
 
 ## Scope
 
@@ -37,6 +37,7 @@ Capture, Home, general search, multi-note merge, and Daily notes remain outside 
 - a shared native `list-checks` icon for the ribbon action and review view, a native editor for the current FIFO note, and an `ItemView` with queue status and review controls.
 - Projects, Areas, Resources, and Archives controls in an evenly spaced category row, with set-expiration, skip, pause, trash, and close grouped in a separate review-control row that wraps safely on narrow sidebars.
 - Nested destination-folder selection, existing `#area` note selection when required, archive-reason input, transaction results, and exact halted recovery output.
+- Resources can optionally link to a main project note: after any required Area selection, choose a project from the configured Projects root or `Без проекта` (No project). The plugin writes a full-path wikilink in `project` only when that property is empty. Closing the selector cancels the action.
 - confirmed movement to the user's configured Obsidian trash only after a second source snapshot matches the pre-confirmation baseline; permanent deletion is not exposed.
 - pause returns to the native editor, while close offers save, discard, and safe cancel when the current editor has unsaved changes.
 - plugin-scoped modal action rows with theme spacing, wrapping, and native Obsidian buttons.
@@ -69,6 +70,8 @@ Expired-note commands:
 Assign commands in Obsidian's Settings → Hotkeys. The two opening commands are always available; current-item commands require an idle item in their own session. No command has a default hotkey.
 
 Before a PARA action, the plugin saves the current native Markdown view, reads a fresh source snapshot, collects every required input, and then revalidates the source immediately before the first mutation. Trash follows the same safety shape: save, inspect, confirm, inspect again, and delete only if both inspections match. Canceling a selector or prompt leaves the note and session unchanged.
+
+The project list includes `#projects` Markdown notes in the configured Projects root and notes directly inside a project folder whose filename matches that folder, optionally prefixed with `00. `. Project documentation is excluded even if tagged `#projects`. The canonical `Templates/Projects.md` displays linked notes from `3. Resources` with Dataview. Existing Resources are not backfilled.
 
 Inbox expiration uses the same calendar-first modal and strict manual fallback as expired-note
 rescheduling. It accepts today or later, saves and revalidates the active source, and writes through

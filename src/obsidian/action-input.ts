@@ -16,6 +16,7 @@ import {
 } from '../editor-exit';
 import type { ParaActionInputPort } from '../para-action-service';
 import { ChoiceSettlement } from '../choice-settlement';
+import { projectChoices } from '../project-choices';
 import {
 	calendarValueFromManual,
 	createExpirationDateDraft,
@@ -354,6 +355,18 @@ export function createObsidianActionInput(app: App): ParaActionInputPort {
 			const choices = areaChoices(app);
 			if (choices.length === 0) throw new Error('No #area notes were found');
 			return choose(app, choices, 'Select area note');
+		},
+		selectProject(root) {
+			const rootPath = normalizePath(root.trim());
+			if (!(app.vault.getAbstractFileByPath(rootPath) instanceof TFolder)) {
+				throw new Error(`PARA folder does not exist: ${rootPath}`);
+			}
+			const choices = projectChoices(rootPath, app.vault.getMarkdownFiles().map((file) => {
+				const cache = app.metadataCache.getFileCache(file);
+				return { path: file.path, tags: cache ? getAllTags(cache) ?? [] : [] };
+			}));
+			return choose(app, ['Без проекта', ...choices], 'Select project for resource')
+				.then((choice) => choice === 'Без проекта' ? '' : choice);
 		},
 		requestArchiveReason() {
 			return new Promise((resolve) =>

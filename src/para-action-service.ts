@@ -15,6 +15,7 @@ export interface ParaActionInputPort {
 	saveSource(path: string): Promise<void>;
 	selectFolder(category: ParaCategory, root: string): Promise<string | null>;
 	selectArea(): Promise<string | null>;
+	selectProject(root: string): Promise<string | null>;
 	requestArchiveReason(): Promise<string | null>;
 }
 
@@ -92,6 +93,11 @@ export class ParaActionService {
 			const area = await this.input.selectArea();
 			if (area === null) return { ok: false, kind: 'canceled' };
 			context.area = area;
+		}
+		if (category === 'resources' && !hasValue(inspection.metadata.project)) {
+			const project = await this.input.selectProject(settings.projectsFolder);
+			if (project === null) return { ok: false, kind: 'canceled' };
+			context.project = project;
 		}
 		if (category === 'archives' && !hasValue(inspection.metadata.archive_reason)) {
 			const reason = await this.input.requestArchiveReason();

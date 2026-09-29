@@ -1,5 +1,12 @@
 # Decisions
 
+## 2026-09-29 — Add one optional project link to a Resource
+
+- Status: accepted and implemented; disposable-vault UI and Dataview evidence is open.
+- When sorting a Resource with empty `project`, offer `#projects` notes at the configured Projects root or one folder below it when the basename matches the folder, optionally prefixed with `00. `. Store the chosen note as a full-path wikilink in `project`; an explicit `Без проекта` choice adds no property and modal dismissal cancels the action.
+- Preserve existing non-empty `project`, revalidate the source after choice, move last, and compensate a new `project` write if the move fails. Do not backfill earlier Resources or model multiple projects in this change.
+- The canonical Projects template queries linked Resources from `3. Resources` through Dataview; Home remains owned by the existing Neovim workflow.
+
 ## 2026-07-31 — Set expired_at without advancing Inbox review
 
 - Status: accepted and implemented; focused disposable-vault evidence remains open.

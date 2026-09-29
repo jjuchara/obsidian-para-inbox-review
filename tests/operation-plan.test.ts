@@ -93,6 +93,34 @@ void test('preserves every existing non-empty metadata value', () => {
 	assert.deepEqual(result.missing, []);
 });
 
+void test('resource project is optional, preserves existing value, and is compensated', () => {
+	const options = {
+		path: '6. Inbox/Resource.md',
+		destination: '3. Resources/Resource.md',
+		category: 'resources' as const,
+		config: CONFIG,
+	};
+	const chosen = buildParaOperationPlan({
+		...options,
+		existing: { area: '[[Work]]' },
+		context: { created: 'now', project: '[[1. Projects/Alpha/Alpha]]' },
+	});
+	assert.equal(chosen.metadata.project, '[[1. Projects/Alpha/Alpha]]');
+	assert.equal(chosen.apply.at(-1)?.name, 'project');
+	assert.deepEqual(chosen.compensate[0], { action: 'remove', name: 'project' });
+	assert.equal(chosen.move.destination, options.destination);
+
+	const absent = normalizeParaMetadata('resources', { area: '[[Work]]' }, { created: 'now', project: '' }, CONFIG);
+	assert.equal(Object.prototype.hasOwnProperty.call(absent.metadata, 'project'), false);
+	assert.deepEqual(absent.missing, []);
+
+	const preserved = normalizeParaMetadata('resources', {
+		area: '[[Work]]', project: '[[Existing]]',
+	}, { created: 'now', project: '[[Other]]' }, CONFIG);
+	assert.equal(preserved.metadata.project, '[[Existing]]');
+	assert.equal(preserved.additions.some((step) => step.name === 'project'), false);
+});
+
 void test('reports every missing value before mutation', () => {
 	const project = normalizeParaMetadata(
 		'projects',

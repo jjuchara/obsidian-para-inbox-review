@@ -13,6 +13,7 @@ export interface MetadataContext {
 	created?: string;
 	archived?: string;
 	area?: string;
+	project?: string;
 	archiveReason?: string;
 	replacements?: Readonly<Record<string, {
 		value: unknown;
@@ -153,6 +154,7 @@ export function normalizeParaMetadata(
 			addMissing(metadata, additions, 'archived', context.archived, 'date');
 			break;
 		case 'resources':
+			addMissing(metadata, additions, 'project', context.project, 'text');
 			break;
 	}
 

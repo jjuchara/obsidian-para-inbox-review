@@ -29,6 +29,9 @@ function fixture(options: {
 	metadata?: Record<string, unknown>;
 	folder?: string | null;
 	area?: string | null;
+	project?: string | null;
+	changeDuringProjectChoice?: boolean;
+	failMove?: boolean;
 	reason?: string | null;
 } = {}) {
 	const calls: string[] = [];
@@ -53,6 +56,7 @@ function fixture(options: {
 		},
 		async moveFile(_path, destination) {
 			calls.push(`move:${destination}`);
+			if (options.failMove) throw new Error('move failed');
 		},
 	};
 	const input: ParaActionInputPort = {
@@ -66,6 +70,11 @@ function fixture(options: {
 		async selectArea() {
 			calls.push('area');
 			return options.area === undefined ? '[[2. Areas/Work]]' : options.area;
+		},
+		async selectProject(root) {
+			calls.push(`project:${root}`);
+			if (options.changeDuringProjectChoice) metadata.external = 'changed';
+			return options.project === undefined ? '' : options.project;
 		},
 		async requestArchiveReason() {
 			calls.push('reason');
@@ -148,4 +157,48 @@ void test('uses a selected nested destination folder', async () => {
 
 	assert.equal(result.ok, true);
 	assert.equal(setup.calls.includes('move:3. Resources/Reference/Note.md'), true);
+});
+
+void test('selected project is written before the resource moves', async () => {
+	const setup = fixture({ metadata: { area: '[[Work]]' }, project: '[[1. Projects/Alpha/Alpha]]' });
+	assert.equal((await setup.service.execute(ITEM, 'resources')).ok, true);
+	assert.deepEqual(setup.calls.slice(-3), [
+		'set:tags', 'set:project', 'move:3. Resources/Note.md',
+	]);
+});
+
+void test('explicit no-project choice moves without writing project', async () => {
+	const setup = fixture({ metadata: { area: '[[Work]]' }, project: '' });
+	assert.equal((await setup.service.execute(ITEM, 'resources')).ok, true);
+	assert.equal(setup.calls.includes('project:1. Projects'), true);
+	assert.equal(setup.calls.includes('set:project'), false);
+});
+
+void test('existing project is kept without prompting', async () => {
+	const setup = fixture({ metadata: { area: '[[Work]]', project: '[[Existing]]' } });
+	assert.equal((await setup.service.execute(ITEM, 'resources')).ok, true);
+	assert.equal(setup.calls.some((call) => call.startsWith('project:')), false);
+	assert.equal(setup.calls.includes('set:project'), false);
+});
+
+void test('closing project choice cancels before mutation', async () => {
+	const setup = fixture({ metadata: { area: '[[Work]]' }, project: null });
+	assert.deepEqual(await setup.service.execute(ITEM, 'resources'), { ok: false, kind: 'canceled' });
+	assert.equal(setup.calls.some((call) => call.startsWith('set:') || call.startsWith('move:')), false);
+});
+
+void test('source changed during project choice fails preflight', async () => {
+	const setup = fixture({ metadata: { area: '[[Work]]' }, project: '[[Alpha]]', changeDuringProjectChoice: true });
+	const result = await setup.service.execute(ITEM, 'resources');
+	assert.equal(result.ok, false);
+	assert.equal(result.kind, 'preflight');
+	assert.equal(setup.calls.some((call) => call.startsWith('set:') || call.startsWith('move:')), false);
+});
+
+void test('failed resource move compensates project property', async () => {
+	const setup = fixture({ metadata: { area: '[[Work]]' }, project: '[[Alpha]]', failMove: true });
+	const result = await setup.service.execute(ITEM, 'resources');
+	assert.equal(result.ok, false);
+	assert.equal(result.kind, 'rolled_back');
+	assert.equal(setup.calls.includes('remove:project'), true);
 });

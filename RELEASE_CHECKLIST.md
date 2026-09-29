@@ -2,6 +2,11 @@
 
 ## Before release
 
+- [x] `0.5.0` package, lockfile, manifest, and versions mapping agree on Obsidian `1.12.0`.
+- [x] The owner authorized the Resource → Project feature release with the disposable-vault selector and Dataview route still open; automatic checks do not close that manual gate. ✅ 2026-09-29
+- [x] `npm run check` passes 75 tests and `git diff --check` passes on the complete `0.5.0` code and documentation diff. ✅ 2026-09-29
+- [x] Russian canonical product, decision, roadmap, template, and manual-evidence documents are synchronized before the release commit. ✅ 2026-09-29
+
 - [x] In a disposable vault, set Inbox `expired_at` from the button and an assigned hotkey; verify
   calendar/manual ISO storage without queue advancement, then cancel, past-date, and source-change
   refusal without mutation. ✅ 2026-08-31
@@ -32,6 +37,9 @@
 - [x] The production build contains no telemetry, network access, direct filesystem access, or undeclared dependencies. ✅ 2026-07-24
 
 ## Publication
+
+- [ ] Annotated tag `0.5.0` and remote `main` resolve to the release commit; release and main CI are green.
+- [ ] Publish the GitHub Release created by tag CI and confirm `main.js`, `manifest.json`, and `styles.css` match the local build by SHA-256.
 
 - [x] Annotated tag `0.4.0`, remote `main`, and the public, non-prerelease GitHub Release resolve to
   commit `eca09f2286cf1fea4321e31680f8d8134f462400`; release/main CI runs `30661278632` and

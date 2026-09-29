@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.5.0 - 2026-09-29
+
+- Added optional main-project selection when sorting Resources from Inbox. The full-path `project` wikilink is added only when empty, with an explicit no-project choice and safe cancellation, source revalidation, and rollback.
+- The canonical Projects template now lists linked notes from `3. Resources`. The owner authorized the feature release while disposable-vault UI and Dataview verification remains open.
+
 ## 0.4.0 - 2026-07-31
 
 - Added `Set expiration` to Inbox review and a tenth user-assignable command for writing
