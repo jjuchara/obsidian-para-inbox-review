@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 0.6.0 - 2026-09-29
 
 - Added standalone commands to archive a selected Project with its folder and return an archived Project to work. Both require status, reason, and confirmation; return offers deadline replacement or clearing.
-- Tagged main Projects in expired-note review now use the folder-aware archive flow. Main project notes record each archive and return action under `История движения проекта`, preserving prior statuses and reasons. Automated checks cover selection, folder and note moves, conflict, cancellation, date handling, and rollback; disposable-vault UI verification remains open.
+- Tagged main Projects in expired-note review now use the folder-aware archive flow. Main project notes record each archive and return action under `История движения проекта`, preserving prior statuses and reasons. Automated checks cover selection, folder and note moves, conflict, cancellation, date handling, and rollback; the owner authorized release while disposable-vault UI verification remains open.
 
 ## 0.5.0 - 2026-09-29
 

@@ -4,7 +4,7 @@ An Obsidian community plugin with independent Inbox and expired-note review work
 
 ## Status
 
-Release `0.5.0` adds an optional main-project link when sorting Resources from Inbox, and the canonical Projects template lists linked resources. The 75-test automated gate passes. The owner authorized release while the focused disposable-vault selector and Dataview check remains open. Submission to the Obsidian Community Directory is pending owner authentication.
+Release `0.6.0` adds commands to archive and return whole Projects with movement history, and uses folder-aware archival for tagged main Projects in expired-note review. The owner authorized release while the focused disposable-vault UI check remains open. Submission to the Obsidian Community Directory is pending owner authentication.
 
 ## Scope
 

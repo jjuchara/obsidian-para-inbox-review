@@ -2,6 +2,8 @@
 
 ## Before release
 
+- [x] `0.6.0` package, lockfile, manifest, and versions mapping agree on Obsidian `1.12.0`; `npm run check` passes 89 tests and `git diff --check` passes on the complete release diff. ✅ 2026-09-29
+- [x] Russian canonical release decision and open manual gate are synchronized with English release contracts before committing. ✅ 2026-09-29
 - [ ] In a disposable vault, verify standalone Archive project and Return project to work for both a folder project and a root-level project; confirm statuses, required reasons, history, destination paths, deadline replacement/clearing, and link updates.
 - [ ] Verify that expired-note review archives a tagged main Project with its folder, while an ordinary expired note retains note-level archival. Check cancel, path conflict, changed descendant, failed move, and visible recovery details.
 - [ ] Record actual Obsidian version, result, and remaining limits in the canonical Russian manual-testing document. Automated checks alone do not close this gate.
@@ -42,6 +44,7 @@
 
 ## Publication
 
+- [ ] Confirm annotated tag `0.6.0` targets the release commit and remote `main`, then verify release CI and assets. The separate disposable-vault UI gate remains open until performed.
 - [x] Annotated tag `0.5.0` and remote `main` resolve to release commit `05ffa4fe686f6b23d416936e73f365dc074edf89`; release and main CI `36557866063` / `36557866107` passed. ✅ 2026-09-29
 - [x] The GitHub Release is public and non-prerelease; downloaded `main.js`, `manifest.json`, and `styles.css` match the local build by SHA-256. ✅ 2026-09-29
 
