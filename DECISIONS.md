@@ -1,5 +1,12 @@
 # Decisions
 
+## 2026-09-29 — Archive and return whole Projects with a movement history
+
+- Status: accepted and implemented; disposable-vault evidence is open.
+- Add standalone Archive project and Return project to work commands. Tagged main project notes are selected from configured roots; a matching project folder moves as a unit to or from `<Archives>/Projects`, while a root-level main note moves alone. Expired-note review uses the same action for tagged main Projects. A past deadline never moves anything automatically.
+- Both directions require a new status, a reason, and exact-path confirmation. Each move appends a dated entry with old and new status plus reason beneath `История движения проекта` in the main note. The current `status` remains in frontmatter. Return clears current archive markers and requires changing or clearing an expired or invalid deadline; earlier events remain in the body for history.
+- Save open project editors; revalidate main note, descendants, and destination before mutation. Write metadata and history before moving; on failure attempt move-back and reverse compensation, and report incomplete recovery. Use official Vault and FileManager APIs without direct filesystem access.
+
 ## 2026-09-29 — Add one optional project link to a Resource
 
 - Status: accepted and implemented; disposable-vault UI and Dataview evidence is open.

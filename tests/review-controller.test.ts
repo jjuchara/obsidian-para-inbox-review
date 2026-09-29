@@ -132,6 +132,20 @@ void test('a successful current action completes and opens the next note', async
 	assert.equal(setup.controller.getSession()?.pending[0]?.path, '6. Inbox/New.md');
 });
 
+void test('a project folder move skips descendants already queued for review', async () => {
+	const setup = fixture({ loadQueue: async () => [
+		{ path: '1. Projects/Alpha/Alpha.md', ctime: 1, snapshot: { mtime: 1, size: 1 } },
+		{ path: '1. Projects/Alpha/Notes.md', ctime: 2, snapshot: { mtime: 1, size: 1 } },
+		{ path: '2. Areas/Other.md', ctime: 3, snapshot: { mtime: 1, size: 1 } },
+	] });
+	await setup.controller.start();
+	await setup.controller.performCurrent(async () => ({
+		transition: 'complete', result: true, removeWithin: '1. Projects/Alpha',
+	}));
+	assert.deepEqual(setup.opened, ['1. Projects/Alpha/Alpha.md', '2. Areas/Other.md']);
+	assert.equal(setup.controller.getSession()?.processed, 2);
+});
+
 void test('stay and halt decisions preserve exact action outcomes', async () => {
 	const setup = fixture();
 	await setup.controller.start();

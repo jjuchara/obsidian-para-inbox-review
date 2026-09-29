@@ -73,6 +73,21 @@ export function completeCurrent(session: ReviewSession): ReviewSession {
 	});
 }
 
+export function completeCurrentWithin(session: ReviewSession, source: string): ReviewSession {
+	const current = requireActive(session);
+	const inside = (path: string): boolean => path === source || path.startsWith(`${source}/`);
+	if (!inside(current.path)) throw new Error('Current review note is outside the completed project');
+	const pending = session.pending.filter((item) => !inside(item.path));
+	const skipped = session.skipped.filter((item) => !inside(item.path));
+	const removed = session.pending.length - pending.length + session.skipped.length - skipped.length;
+	return {
+		status: pending.length === 0 ? 'finished' : 'active',
+		pending,
+		processed: session.processed + removed,
+		skipped,
+	};
+}
+
 export function skipCurrent(session: ReviewSession): ReviewSession {
 	const current = requireActive(session);
 	return finishOrContinue(session, {

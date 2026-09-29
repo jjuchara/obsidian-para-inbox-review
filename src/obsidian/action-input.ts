@@ -17,6 +17,9 @@ import {
 import type { ParaActionInputPort } from '../para-action-service';
 import { ChoiceSettlement } from '../choice-settlement';
 import { projectChoices } from '../project-choices';
+import { projectNotePaths } from '../project-choices';
+import type { DeadlineChoice, ProjectMovementInput, ProjectMovementDirection } from '../project-movement';
+import type { ParaInboxReviewSettings } from '../settings';
 import {
 	calendarValueFromManual,
 	createExpirationDateDraft,
@@ -64,6 +67,7 @@ class TextPromptModal extends Modal {
 		title: string,
 		private readonly requiredMessage = 'A value is required',
 		private readonly placeholder = 'Required',
+		private readonly initialValue = '',
 	) {
 		super(app);
 		this.setTitle(title);
@@ -75,6 +79,7 @@ class TextPromptModal extends Modal {
 			type: 'text',
 			placeholder: this.placeholder,
 		});
+		this.input.value = this.initialValue;
 		this.input.addEventListener('keydown', (event) => {
 			if (event.key === 'Enter') this.submit();
 		});
@@ -230,9 +235,11 @@ class ConfirmationModal extends Modal {
 		app: App,
 		private readonly message: string,
 		private readonly resolveConfirmation: (confirmed: boolean) => void,
+		private readonly title = 'Move note to trash?',
+		private readonly confirmLabel = 'Move to trash',
 	) {
 		super(app);
-		this.setTitle('Move note to trash?');
+		this.setTitle(title);
 	}
 
 	onOpen(): void {
@@ -242,7 +249,7 @@ class ConfirmationModal extends Modal {
 		});
 		const cancel = actions.createEl('button', { text: 'Cancel' });
 		cancel.addEventListener('click', () => this.finish(false));
-		const confirm = actions.createEl('button', { text: 'Move to trash' });
+		const confirm = actions.createEl('button', { text: this.confirmLabel });
 		confirm.addEventListener('click', () => this.finish(true));
 	}
 
@@ -387,6 +394,66 @@ export function chooseProjectArchiveStatus(
 	statuses: readonly string[],
 ): Promise<string | null> {
 	return choose(app, statuses, 'Project status after archiving');
+}
+
+export function chooseProjectNote(
+	app: App,
+	root: string,
+	title: string,
+): Promise<string | null> {
+	const normalizedRoot = normalizePath(root.trim());
+	if (!(app.vault.getAbstractFileByPath(normalizedRoot) instanceof TFolder)) {
+		throw new Error(`PARA folder does not exist: ${normalizedRoot}`);
+	}
+	const choices = projectNotePaths(normalizedRoot, app.vault.getMarkdownFiles().map((file) => {
+		const cache = app.metadataCache.getFileCache(file);
+		return { path: file.path, tags: cache ? getAllTags(cache) ?? [] : [] };
+	}));
+	if (choices.length === 0) throw new Error(`No projects found in ${normalizedRoot}`);
+	return choose(app, choices, title);
+}
+
+export function createProjectMovementInput(
+	app: App,
+	settings: () => ParaInboxReviewSettings,
+): ProjectMovementInput {
+	return {
+		async saveSource(path) { await sourceView(app, path)?.save(); },
+		chooseStatus(direction: ProjectMovementDirection, current: string) {
+			if (direction === 'archive') {
+				return chooseProjectArchiveStatus(app, settings().projectArchiveStatuses);
+			}
+			return new Promise((resolve) =>
+				new TextPromptModal(app, resolve, 'Project status after return',
+					'A new status is required', 'Status', current === 'В работе' ? current : 'В работе').open(),
+			);
+		},
+		requestReason(direction) {
+			return new Promise((resolve) =>
+				new TextPromptModal(app, resolve, direction === 'archive' ? 'Archive reason' : 'Return reason',
+					'A reason is required', 'Reason').open(),
+			);
+		},
+		async chooseDeadline(current: unknown, expired: boolean): Promise<DeadlineChoice | null> {
+			const choices = expired ? ['Set new deadline', 'Clear deadline'] :
+				['Keep current deadline', 'Set new deadline', 'Clear deadline'];
+			const currentLabel = typeof current === 'string' ? current : current == null ? 'empty' : 'invalid value';
+			const selected = await choose(app, choices, `Deadline after return (${currentLabel})`);
+			if (selected === null) return null;
+			if (selected === 'Keep current deadline') return { kind: 'keep' };
+			if (selected === 'Clear deadline') return { kind: 'clear' };
+			const value = await requestExpirationDate(app, 'deadline');
+			return value === null ? null : { kind: 'set', value };
+		},
+		confirm(source, destination, direction) {
+			const object = /\.md$/iu.test(source) ? 'project note' : 'project folder and all its contents';
+			return new Promise((resolve) =>
+				new ConfirmationModal(app, `${source} → ${destination}. The ${object} will move.`,
+					resolve, direction === 'archive' ? 'Archive project?' : 'Return project to work?',
+					direction === 'archive' ? 'Archive project' : 'Return project').open(),
+			);
+		},
+	};
 }
 
 export function requestExpirationDate(

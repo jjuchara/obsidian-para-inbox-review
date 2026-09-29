@@ -1,6 +1,7 @@
 import {
 	closeSession,
 	completeCurrent,
+	completeCurrentWithin,
 	createReviewSession,
 	currentInboxItem,
 	haltSession,
@@ -21,6 +22,7 @@ export interface ReviewActionDecision<Result> {
 	transition: 'stay' | 'complete' | 'halt';
 	result: Result;
 	reason?: string;
+	removeWithin?: string;
 }
 
 export class ReviewController {
@@ -82,7 +84,9 @@ export class ReviewController {
 				return decision.result;
 			}
 
-			const candidate = completeCurrent(current);
+			const candidate = decision.removeWithin
+				? completeCurrentWithin(current, decision.removeWithin)
+				: completeCurrent(current);
 			this.commit(candidate);
 			try {
 				await this.openCurrent(candidate);

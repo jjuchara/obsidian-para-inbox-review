@@ -4,6 +4,7 @@ import type { InboxQueueItem } from '../src/domain/inbox-queue';
 import {
 	closeSession,
 	completeCurrent,
+	completeCurrentWithin,
 	createReviewSession,
 	currentInboxItem,
 	haltSession,
@@ -53,6 +54,19 @@ void test('completing the last item finishes with an empty Inbox', () => {
 		remainingInInbox: 0,
 		inboxEmpty: true,
 	});
+});
+
+void test('a folder move removes its remaining and skipped review items', () => {
+	const queue = [
+		item('1. Projects/Alpha/00. Alpha.md', 1),
+		item('1. Projects/Alpha/Notes.md', 2),
+		item('2. Areas/Other.md', 3),
+	];
+	const session = createReviewSession(queue);
+	const updated = completeCurrentWithin(session, '1. Projects/Alpha');
+	assert.deepEqual(updated.pending.map((entry) => entry.path), ['2. Areas/Other.md']);
+	assert.equal(updated.processed, 2);
+	assert.equal(session.pending.length, 3);
 });
 
 void test('skip removes an item only from the current pass', () => {

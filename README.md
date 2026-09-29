@@ -20,6 +20,7 @@ The plugin provides two user-started review workflows shared with `nvim-obsidian
 - review Projects whose `deadline` has passed and other non-archive Markdown notes that opt in with `expired_at`; strict `YYYY-MM-DD` and `DD.MM.YYYY` calendar dates are accepted, while rescheduling writes ISO;
 - reschedule a candidate through a native today-or-later calendar or explicit strict manual entry, archive it, confirm trash, or skip it without background mutation;
 - require a configurable new project status before an expired Project is archived.
+- archive a selected Project and its folder, and return an archived Project to work with a required reason and a movement history in the main note.
 
 Capture, Home, general search, multi-note merge, and Daily notes remain outside this plugin.
 
@@ -67,7 +68,15 @@ Expired-note commands:
 - `Pause expired-note review`
 - `Close expired-note review`
 
-Assign commands in Obsidian's Settings → Hotkeys. The two opening commands are always available; current-item commands require an idle item in their own session. No command has a default hotkey.
+Project movement commands, available without starting a review:
+
+- `Archive project` selects a tagged main project note, requires a new configured archive status and a reason, then moves its project folder (or root-level note) to `<Archives>/Projects`.
+- `Return project to work` selects a project under `<Archives>/Projects`, requires a work status and return reason, offers a new or cleared `deadline`, then moves it back to the configured Projects root. An expired or invalid old deadline must be replaced or cleared.
+
+Both commands confirm the exact source and destination before mutation. The main note receives a `История движения проекта` section with a dated status and reason entry for each move. On return, current `archived` and `archive_reason` properties are cleared; the history preserves their meaning. When archiving a tagged main Project from expired-note review, `Archive current expired note` runs the same folder-aware flow. Other expired notes keep the existing note-level archive action. A past `deadline` only offers the project for review; it never moves the project without an explicit action.
+Queued notes within an archived project folder are removed from the current expired-note pass after the folder moves.
+
+Assign commands in Obsidian's Settings → Hotkeys. Opening and project movement commands are always available; current-item commands require an idle item in their own session. No command has a default hotkey.
 
 Before a PARA action, the plugin saves the current native Markdown view, reads a fresh source snapshot, collects every required input, and then revalidates the source immediately before the first mutation. Trash follows the same safety shape: save, inspect, confirm, inspect again, and delete only if both inspections match. Canceling a selector or prompt leaves the note and session unchanged.
 

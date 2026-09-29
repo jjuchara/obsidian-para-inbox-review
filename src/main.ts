@@ -1,15 +1,21 @@
-import { Notice, Plugin, TFile } from 'obsidian';
+import { getAllTags, Notice, Plugin, TFile } from 'obsidian';
 import type { ParaCategory } from './domain/operation-plan';
 import type { RecoveryDetails } from './domain/transaction-executor';
 import {
 	confirmTrash,
 	chooseProjectArchiveStatus,
+	chooseProjectNote,
+	createProjectMovementInput,
 	createObsidianActionInput,
 	prepareReviewClose,
 	requestExpirationDate,
 } from './obsidian/action-input';
 import { loadInboxQueue } from './obsidian/inbox-loader';
 import { createObsidianMutationAdapter } from './obsidian/mutation-adapter';
+import { createProjectMovementPort } from './obsidian/project-movement-port';
+import { ProjectMovementService, projectArchiveRoot, projectMovePaths, type ProjectMovementResult } from './project-movement';
+import { isMainProjectPath } from './project-choices';
+import { PROJECT_MOVEMENT_COMMANDS } from './project-movement-commands';
 import { loadExpiredQueue } from './obsidian/expired-loader';
 import {
 	EXPIRED_REVIEW_ICON,
@@ -53,6 +59,8 @@ export default class ParaInboxReviewPlugin extends Plugin {
 	private mutation!: ObsidianMutationPort;
 	private actionInput!: ParaActionInputPort;
 	private paraActions!: ParaActionService;
+	private projectMovement!: ProjectMovementService;
+	private projectMovePending = false;
 
 	async onload(): Promise<void> {
 		await this.loadSettings();
@@ -61,6 +69,11 @@ export default class ParaInboxReviewPlugin extends Plugin {
 		this.paraActions = new ParaActionService(
 			this.mutation,
 			this.actionInput,
+			() => this.settings,
+		);
+		this.projectMovement = new ProjectMovementService(
+			createProjectMovementPort(this.app),
+			createProjectMovementInput(this.app, () => this.settings),
 			() => this.settings,
 		);
 		this.reviewController = new ReviewController({
@@ -94,6 +107,10 @@ export default class ParaInboxReviewPlugin extends Plugin {
 		);
 		this.registerReviewCommands();
 		this.registerExpiredReviewCommands();
+		for (const command of PROJECT_MOVEMENT_COMMANDS) {
+			this.addCommand({ id: command.id, name: command.name,
+				callback: () => void this.moveSelectedProject(command.direction) });
+		}
 		this.addRibbonIcon(REVIEW_ICON, 'Open inbox review', () => {
 			void this.startReview();
 		});
@@ -179,8 +196,26 @@ export default class ParaInboxReviewPlugin extends Plugin {
 
 	async archiveExpiredNote(): Promise<void> {
 		try {
-			const result = await this.expiredReviewController.performCurrent(async (baseItem): Promise<ReviewActionDecision<ParaActionResult>> => {
+			const result = await this.expiredReviewController.performCurrent(async (baseItem): Promise<ReviewActionDecision<ParaActionResult | ProjectMovementResult>> => {
 				const item = baseItem as ExpiredQueueItem;
+				const projectFile = this.app.vault.getAbstractFileByPath(item.path);
+				const projectCache = projectFile instanceof TFile ? this.app.metadataCache.getFileCache(projectFile) : null;
+				const rawTags = item.metadata.tags;
+				const frontmatterTags: unknown[] = Array.isArray(rawTags) ? rawTags as unknown[] :
+					typeof rawTags === 'string' ? [rawTags] : [];
+				if (item.project && isMainProjectPath(this.settings.projectsFolder, item.path) &&
+					[...frontmatterTags, ...(projectCache ? getAllTags(projectCache) ?? [] : [])]
+						.some((tag) => typeof tag === 'string' && tag.replace(/^#/u, '') === 'projects')) {
+					const action = await this.projectMovement.execute(item.path, 'archive');
+					return {
+						transition: action.ok ? 'complete' : action.kind === 'rollback' ? 'halt' : 'stay',
+						result: action,
+						removeWithin: action.ok ? projectMovePaths(item.path, 'archive',
+							this.settings.projectsFolder, this.settings.archivesFolder).source : undefined,
+						reason: action.ok || action.kind !== 'rollback' ? undefined :
+							`Manual recovery required for ${item.path}: ${action.recovery?.join('; ')}`,
+					};
+				}
 				let status: string | null = null;
 				if (item.project) {
 					status = await chooseProjectArchiveStatus(this.app, this.settings.projectArchiveStatuses);
@@ -197,8 +232,31 @@ export default class ParaInboxReviewPlugin extends Plugin {
 					reason: action.ok || action.kind !== 'rollback' ? undefined : this.recoveryMessage(action),
 				};
 			});
-			this.reportAction(result);
+			if (!result.ok && result.kind !== 'canceled') {
+				if (result.kind === 'rollback') {
+					const details = Array.isArray(result.recovery) ? result.recovery.join('; ') :
+						this.recoveryMessage(result as Extract<ParaActionResult, { kind: 'rollback' }>);
+					new Notice(`${result.message}: ${details}`);
+				} else new Notice(result.message);
+			}
 		} catch (error) { new Notice(this.errorMessage(error)); }
+	}
+
+	private async moveSelectedProject(direction: 'archive' | 'restore'): Promise<void> {
+		if (this.projectMovePending) return;
+		this.projectMovePending = true;
+		try {
+			const root = direction === 'archive' ? this.settings.projectsFolder :
+				projectArchiveRoot(this.settings.archivesFolder);
+			const path = await chooseProjectNote(this.app, root,
+				direction === 'archive' ? 'Select project to archive' : 'Select project to return');
+			if (path === null) return;
+			const result: ProjectMovementResult = await this.projectMovement.execute(path, direction);
+			if (result.ok) new Notice(`Project moved to ${result.destination}`);
+			else if (result.kind !== 'canceled') new Notice(result.recovery?.length ?
+				`${result.message}. Manual recovery required: ${result.recovery.join('; ')}` : result.message);
+		} catch (error) { new Notice(this.errorMessage(error)); }
+		finally { this.projectMovePending = false; }
 	}
 
 	async trashExpiredNote(): Promise<void> {

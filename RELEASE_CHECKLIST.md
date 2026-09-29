@@ -2,6 +2,10 @@
 
 ## Before release
 
+- [ ] In a disposable vault, verify standalone Archive project and Return project to work for both a folder project and a root-level project; confirm statuses, required reasons, history, destination paths, deadline replacement/clearing, and link updates.
+- [ ] Verify that expired-note review archives a tagged main Project with its folder, while an ordinary expired note retains note-level archival. Check cancel, path conflict, changed descendant, failed move, and visible recovery details.
+- [ ] Record actual Obsidian version, result, and remaining limits in the canonical Russian manual-testing document. Automated checks alone do not close this gate.
+
 - [x] `0.5.0` package, lockfile, manifest, and versions mapping agree on Obsidian `1.12.0`.
 - [x] The owner authorized the Resource → Project feature release with the disposable-vault selector and Dataview route still open; automatic checks do not close that manual gate. ✅ 2026-09-29
 - [x] `npm run check` passes 75 tests and `git diff --check` passes on the complete `0.5.0` code and documentation diff. ✅ 2026-09-29

@@ -64,7 +64,7 @@ export class ParaInboxReviewSettingTab extends PluginSettingTab {
 
 		new Setting(this.containerEl)
 			.setName('Project archive statuses')
-			.setDesc('Comma-separated statuses offered before an expired project is archived.')
+			.setDesc('Comma-separated statuses offered when a project is archived.')
 			.addText((text) =>
 				text
 					.setPlaceholder('Завершено, Отменено')
